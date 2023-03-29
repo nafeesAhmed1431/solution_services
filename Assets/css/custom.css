@@ -1,0 +1,576 @@
+@font-face {
+    font-family: cl-b;
+    src: url(../font/cloister/CloisterBlack.ttf);
+}
+
+@font-face {
+    font-family: hel-b;
+    src: url(../font/helveticaneue/HelveticaNeueLTStd-Bd.otf);
+}
+
+@font-face {
+    font-family: hel-bl;
+    src: url(../font/helveticaneue/HelveticaNeueLTStd-Blk.otf);
+}
+
+@font-face {
+    font-family: hel-m;
+    src: url(../font/helveticaneue/HelveticaNeueLTStd-Md.otf);
+}
+
+@font-face {
+    font-family: hel-h;
+    src: url(../font/helveticaneue/HelveticaNeueLTStd-Hv.otf);
+}
+
+html {
+    /* background-image: url(../img/bg-img.jpg); */
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    min-height: 100%;
+    height: unset;
+}
+
+html::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    z-index: -1;
+}
+
+body {
+    background: transparent;
+}
+
+.disable-text-selection .list {
+    background: #fff;
+    border-radius: 20px;
+    padding: 120px 20px 40px;
+}
+
+a.theme-button {
+    display: none;
+}
+
+.round_corner {
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px 0.25px lightgray;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-row {
+    overflow-x: auto;
+}
+
+.card-row::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    background-color: #F5F5F5;
+}
+
+.card-row::-webkit-scrollbar {
+    width: 12px;
+    height: 10px;
+    background-color: #F5F5F5;
+}
+
+.card-row::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #c1c1c1;
+}
+
+.round_corner2 {
+    box-shadow: 0 1px 15px rgb(0 0 0 / 4%), 0 1px 6px rgb(0 0 0 / 4%);
+}
+
+.card-1 {
+    margin: 10px 13px 0;
+}
+
+.progress {
+    height: 17px;
+}
+
+.progress-bar {
+    border-radius: 20px;
+}
+
+.progress1 {
+    position: absolute;
+    width: 80%;
+    bottom: 20px;
+    left: 10%;
+    border-radius: 20px;
+}
+
+.grnd-progress-bar {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.flipped {
+    transform: rotateY(180deg);
+}
+
+.round_corner1 {
+    background-color: #c7e0f7;
+}
+
+.flip-card {
+    background-color: transparent;
+    height: 442px;
+    perspective: 1000px;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 1s;
+    transform-style: preserve-3d;
+}
+
+/* .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+} */
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.flip-card-back {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #c7e0f7;
+    transform: rotateY(180deg);
+}
+
+.flip-card-back img {
+    width: 200px;
+}
+
+.view-qr-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+}
+
+.view-qr-btn button {
+    border: none;
+    padding: 6px 50px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.bg_white {
+    background-color: azure;
+}
+
+.icon_large {
+    font-size: 50px;
+}
+
+.font_large {
+    font-size: 60px;
+}
+
+.text-medium {
+    font-size: 20px;
+}
+
+.overflow {
+    white-space: nowrap;
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.overflow_front {
+    white-space: nowrap;
+    width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.overFlowTitle {
+    white-space: nowrap;
+    width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bold {
+    font-style: bold;
+}
+
+::file-selector-button {
+    display: none;
+}
+
+.d-card {
+    /* height: 200px; */
+    padding: 45px 60px 35px 35px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+}
+
+.d-card-1,
+.d-card-2,
+.d-card-3 {
+    min-height: 250px;
+    padding: 35px;
+}
+
+.d-card-1 h1.text-large,
+.d-card-2 h1.text-large,
+.d-card-3 h1.text-large {
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+.d-card-1 {
+    background-image: url(../img/district-bg.svg);
+    background-repeat: no-repeat;
+    background-position: bottom right 21px;
+}
+
+.d-card-2 {
+    background-image: url(../img/calender-bg.svg);
+    background-repeat: no-repeat;
+    background-position: bottom right 21px;
+}
+
+.d-card-3 {
+    background-image: url(../img/member-bg.svg);
+    background-repeat: no-repeat;
+    background-position: bottom right 21px;
+}
+
+.d-card-content p.text-medium {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    color: #00365A;
+    font-family: hel-b;
+    margin-bottom: 10px;
+}
+
+.d-card-content p.text-small {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #5B5B5B;
+    margin-bottom: 10px;
+}
+
+.d-card-content p.text-small b {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    color: #00365A;
+    font-family: hel-b;
+}
+
+.p_card_icon {
+    font-size: 30px;
+}
+
+.p_card_text {
+    font-size: 50px;
+}
+
+.profile-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.lodge-title {
+    width: 70%;
+}
+
+.lodge-title h3 {
+    font-size: 40px;
+    font-family: cl-b;
+    text-align: center;
+    line-height: 33px;
+}
+
+.lodge_logo img {
+    width: 140%;
+}
+
+.profile-card-title {
+    background-color: #6565e7;
+    padding: 5px 0;
+}
+
+.profile-card-title h5 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 10px;
+}
+
+.member-profile-img {
+    text-align: end;
+    position: relative;
+}
+
+.member-profile-img img {
+    width: 230px;
+}
+
+.profile-layover-img {
+    position: absolute;
+    top: 40%;
+    left: -15px;
+}
+
+.profile-layover-img img {
+    width: 60px;
+}
+
+.member-details {
+    padding: 20px;
+}
+
+.member-details p span {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.member-details p {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+@media (max-width:600px) {
+    .navbar .navbar-left {
+        flex-basis: 17%;
+    }
+
+    .navbar .navbar-right {
+        flex-basis: 20%;
+        text-align: right;
+    }
+}
+
+@media (max-width:430px) {
+    .lodge-title {
+        width: 67%;
+    }
+
+    .lodge-title h3 {
+        font-size: 22px;
+    }
+
+    .lodge_logo img {
+        width: 100%;
+    }
+
+    .profile-card-title h5 {
+        letter-spacing: 5px;
+    }
+
+    .member-profile-img img {
+        width: 100%;
+    }
+
+    .flip-card {
+        height: 1000px;
+    }
+}
+
+
+/* new design css  */
+
+.d-card .card-body {
+    padding: 0;
+}
+
+.dash-cards-text {
+    margin-top: 25px;
+}
+
+.dash-cards-text p {
+    font-size: 20px !important;
+    font-family: hel-b;
+    color: #5B5B5B;
+    font-style: normal;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.dash-card-nmbr h1 {
+    font-family: hel-bl;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 60px;
+    color: #00365A;
+}
+
+.dash-nav-items span {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    color: #00365A;
+    margin-top: 5px;
+}
+
+a.navbar-logo h1 {
+    font-weight: 700;
+    color: #00365A;
+    font-size: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.content-header h1 {
+    font-weight: 700;
+    color: #00365A;
+    font-size: 20px;
+    padding: 0;
+    margin: 0;
+    margin-left: 20px;
+}
+
+table.dataTable {
+    border-collapse: collapse !important;
+}
+
+.table thead th {
+    border: none;
+}
+
+table.dataTable tr {
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+table.dataTable td {
+    border: none;
+    vertical-align: middle;
+}
+
+table.dataTable td .btn {
+    background-color: transparent;
+    border: none;
+    color: #000;
+}
+
+table.dataTable td .btn i {
+    font-size: 18px;
+}
+
+.btn-add {
+    background-color: #00365A;
+    color: #fff;
+}
+
+.btn-add:hover {
+    color: #fff;
+}
+
+@media (max-width: 990px) {
+    .profile-layover-img {
+        left: 199px;
+    }
+
+    .profile-layover-img img {
+        width: 45px;
+    }
+}
+
+.btns-bg {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 20px;
+}
+
+@media (max-width: 575px) {
+    .flip-card {
+        height: 488px !important;
+    }
+
+    .res-col {
+        width: 33%;
+    }
+
+    .member-profile-img img {
+        width: 100%;
+    }
+
+    .profile-card-body .row {
+        flex-direction: row !important;
+    }
+}
+
+@media (max-width: 500px) {
+    .flip-card {
+        height: 925px !important;
+    }
+
+    .res-col {
+        width: 100%;
+    }
+
+    .member-profile-img {
+        text-align: center;
+    }
+
+    .member-profile-img img {
+        width: 60%;
+    }
+
+    .profile-card-body .row {
+        flex-direction: column !important;
+    }
+
+    .lodge_logo img {
+        width: 100%;
+    }
+
+    .lodge-title h3 {
+        font-size: 25px;
+    }
+}
+
+/* colors */
+.total:hover{
+    background-color: #96e9ff;
+    color: #96e9ff;
+}
+.archived:hover{
+    background-color: #ffb3b3;
+    color: #ffb3b3;
+}
+.completed:hover{
+    background-color: #aeffad;
+    color: #aeffad;
+}
+.underConstruction:hover{
+    background-color: #fffcaa;
+    color: #fffcaa;
+}

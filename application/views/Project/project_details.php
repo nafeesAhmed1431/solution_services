@@ -1,0 +1,54 @@
+<div class="card-body">
+    <h2><?= $pageHeading ?> : " <?= $project[0]->project_name ?> "</h2>
+    <hr>
+</div>
+<div class="row flex-nowrap card-row">
+    <?php $gpm=0; $gpc=0; foreach ($lists as $list): $max=0; $curr=0;?>
+        <div class="card card-1 position-relative col-lg-3 round_corner round_corner2 mb-3">
+            <div class="card-header mt-3">
+                <h6 class="overFlowTitle" data-toggle="tooltip" data-placement="top" data-original-title="<?= $list->title ?>"><?= $list->title ?></h6>
+            </div>
+            <div class="card-body">
+                    <p class="list-item-heading mb-4">
+                        <?php foreach ($documents as $document) :?>
+                            <?php if ($document->checklists_list_id == $list->id) : ?>
+                                <?php // if ($document->list_id == $list->id) : ?>
+                                    <?php if(empty($document->file_name)): ?><i data-toggle="tooltip" data-placement="right" data-original-title="Notificar Empresa" class="fa-regular fa-bell text-right w-100 text-warning" data-pid="<?=$project[0]->id?>" data-lid="<?=$list->id?>" data-clid="<?=$document->id?>" onclick="notify(this)" ></i><?php endif; ?>
+                                    <label class="form-group has-float-label mb-4">
+                                        <input type="file" data-checklist_id="<?= $document->id ?>" data-list_id="<?= $list->id ?>" data-project_id="<?= $project[0]->id ?>" class="form-control" onchange="upload_file(this)">
+                                        <span class="text-small text-<?= (!empty($document->file_name))?"success":"danger";?> overflow" data-toggle="tooltip" data-placement="top" data-original-title="<?= $document->title ?>"><?= $document->title ?></span>
+
+                                        <?php if (!empty($document->file_name)) : ?>
+                                            <a class="text-small text-muted" target="_blank" href="<?= base_url('Assets/docs/') . $document->file_name ?>">Ver Documento</a>
+                                        <?php $curr++; $gpc++; endif; ?>
+                                    </label>
+                                <?php // endif; ?>
+                            <?php $max++; $gpm++; endif; ?>
+                        <?php endforeach;?>
+                        </p>
+                <footer>
+                    <?php if(empty($max)) {?>
+                            <?php print_r('');?>
+                            <?php }else{?>
+
+                        <?php if((($curr/$max)*100)!=0): ?>
+                            <div class="progress progress1">
+                                <div title="<?=intval((($curr/$max)*100))."%"?>" class="progress-bar bg-<?php if ((($curr/$max)*100) < 50) {echo "danger";} elseif ((($curr/$max)*100) < 80){echo"warning";} else {echo "success";} ?>" style="width: <?= (($curr/$max)*100) ?>%;"><?= intval((($curr/$max)*100)) ?>%</div> 
+                            </div>
+                        <?php else: ?>
+                            <!-- <h6 class="text-muted round_corner p-1 text-small">No hay documentos Subidos</h6> -->
+                            <p class="round_corner text-center p-1 text-danger text-small">No hay documentos Subidos</p>
+                        <?php endif; ?>
+                    <?php }?>
+                </footer>
+            </div>
+        </div>
+    <?php endforeach;  ?>
+</div>
+    <?php if(empty($max)) {?>
+        <?php print_r('');?>
+    <?php }else{?>
+        <div class="mt-3">
+            <div title="<?=intval((($gpc/$gpm)*100))."%"?>" class="progress-bar grnd-progress-bar row  bg-<?php if ((($gpc/$gpm)*100) < 50) {echo "danger";} elseif ((($gpc/$gpm)*100) < 80){echo"warning";} else {echo "success";} ?>" style="width: <?= (($gpc/$gpm)*100) ?>%;"><?= intval((($gpc/$gpm)*100)) ?>%</div> 
+        </div>
+    <?php }?>
