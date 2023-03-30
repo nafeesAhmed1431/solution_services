@@ -17,6 +17,7 @@
                       <div class="box-body">
                           <div class="row">
                             <div class="col-lg-12 text-right form-group">
+                              <a class="btn btn-add pad" href="<?=base_url('Process')?>">Process</a>
                               <a class="btn btn-add pad" href="javascript:void(0);" onclick="add_list()"><i class="iconsminds-add" aria-hidden="true"></i>Add List</a>
                             </div>
                           </div>

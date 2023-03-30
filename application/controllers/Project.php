@@ -8,9 +8,8 @@ class Project extends CI_Controller
 	{
 		parent::__construct();
 
-		if (!($this->session->userdata('logged_in') == True)) :
+		if (!($this->session->userdata('logged_in') == True))
 			redirect(base_url());
-		endif;
 
 		$this->load->model('Project_model');
 		$this->load->model('Admin_model');
@@ -217,7 +216,7 @@ class Project extends CI_Controller
 			'tbl_project_records'
 		);
 
-		echo json_encode(['res'=>$res,"status"=>(($this->input->get('status'))==1 ? 0 : 1)]);
+		echo json_encode(['res' => $res, "status" => (($this->input->get('status')) == 1 ? 0 : 1)]);
 	}
 
 	public function delete_project_record()
@@ -258,6 +257,13 @@ class Project extends CI_Controller
 		} else {
 			echo json_encode(array('status' => '204', 'msg' => 'Unexpected error!, please contact system administrator.'));
 		}
+	}
+
+	public function complete_projects()
+	{
+		$data['pageHeading'] 	= 'Pending Projects';
+		$data['projects'] 		= $this->Project_model->projects(2);
+		$this->load_view('Project/', 'pending_projects', $data);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////

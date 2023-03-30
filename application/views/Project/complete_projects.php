@@ -81,7 +81,5 @@
       </div>
     </section>
     <input type="hidden" id="callBackLoc" value="<?php echo base_url(); ?>" />
-    <!-- <script src="<?php //echo base_url(); 
-                      ?>Assets/js/custum/all_projects_view.js"></script> -->
   </div>
 </div>

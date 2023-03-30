@@ -15,18 +15,7 @@ class Project extends CI_Controller
 		$this->load->model('Project_model');
 		$this->load->model('Admin_model');
 		$this->load->library('Form_validation');
-	}
-
-	public function index()
-	{
-		echo "reached here";
-	}
-
-	public function check($data)
-	{
-		echo "<pre>";
-		print_r($data);
-		exit;
+		exit('reached');
 	}
 
 	public function load_view($path=null,$module=null,$pgdata=null)
@@ -42,7 +31,6 @@ class Project extends CI_Controller
 	public function all_projects()
 	{
 		$data['pageHeading'] 	= 'Todos los Proyectos';
-		// $data['projects'] 		= $this->Project_model->all_data('tbl_projects');
 		$data['projects'] 		= $this->Project_model->projects(2);
 		$this->load_view('Project/','all_projects',$data);
 	}
@@ -65,8 +53,8 @@ class Project extends CI_Controller
 		$data['projects'] 		= $this->Project_model->projects(3);
 		$this->load_view('Project/','archived_projects',$data);
 	}
-	public function project_details($id)
-	{
+	
+	public function project_details($id){
 		$data['pageHeading'] 	= 'Detalles del Proyecto';
 		$data['project'] = $this->Project_model->details('tbl_projects',$id);
 		$data['lists'] = $this->Project_model->get_lists($data['project'][0]->project_size_m2);
@@ -75,20 +63,17 @@ class Project extends CI_Controller
 		$this->load_view('Project/','project_details',$data);
 	}
 
-	public function edit_project($id)
-	{
+	public function edit_project($id){
 		$data['pageHeading'] 	= 'Editar Proyecto';
 		$data['project'] 		=  $this->Project_model->details('tbl_projects',$id);
 		$this->load_view('Project/','edit_project',$data);
 	}
 
-	public function update_project()
-	{
+	public function update_project(){
 		$this->add_update_project($this->input->post(),2);
 	}
 
-	public function new_project()
-	{
+	public function new_project(){
 		if(empty($this->input->post()))
 		{
 			$data['pageHeading'] = 'Añadir Nuevo Proyecto';
@@ -100,8 +85,7 @@ class Project extends CI_Controller
 		}
 	}
 
-	public function add_update_project($data,$check)
-	{
+	public function add_update_project($data,$check){
 			$this->form_validation->set_rules('project_name'	, 'Project Name'	, 'required');
 			$this->form_validation->set_rules('location'		, 'Location'		, 'required');
 			$this->form_validation->set_rules('project_size_m2'	, 'Project Size'	, 'required|numeric');
