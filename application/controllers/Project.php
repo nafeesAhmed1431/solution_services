@@ -81,16 +81,15 @@ class Project extends CI_Controller
 		$data['lists'] = $this->Project_model->get_lists($data['project'][0]->project_size_m2);
 		$data['list_count'] = count($data['lists']);
 		$data['documents'] = $this->Project_model->get_project_documents($id);
-		// $data['documents'] = $this->Project_model->get_selected_project_checklists($id);
 		$this->load_view('Project/', 'project_details', $data);
 	}
 
-	public function edit_project($id)
-	{
+	public function edit_project($id){
 		$data['pageHeading'] 	= 'Editar Proyecto';
-		$data['project'] 		=  $this->Project_model->details('tbl_projects', $id);
+		$data['project'] 		=  $this->Project_model->details('tbl_projects',$id);
 		$data['additional_emails'] = json_decode($data['project'][0]->additional_emails);
-		$this->load_view('Project/', 'edit_project', $data);
+		$data['additional_emails_count'] = count(json_decode($data['project'][0]->additional_emails));
+		$this->load_view('Project/','edit_project',$data);
 	}
 
 	public function update_project()

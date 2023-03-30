@@ -91,15 +91,16 @@
                 </div>
                 <div class="form-row additional-emails">
                     <?php if (!empty($additional_emails)) :  foreach ($additional_emails as $email) : ?>
-                        <div class="col-md-6 mb-3">
-                            <div class="input-group">
-                                <input type="email" class="form-control" name="additional_emails[]" placeholder="Email de Contacto" required value="<?=$email?>">
-                                <div class="input-group-append">
-                                    <button class="btn btn-sm btn-danger remove_email"><span class="text-medium simple-icon-minus"></span></button>
+                            <div class="col-md-6 mb-3 additional_email">
+                                <div class="input-group">
+                                    <input type="email" class="form-control" name="additional_emails[]" placeholder="Email de Contacto" required value="<?= $email ?>">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-sm btn-danger remove_email"><span class="text-medium simple-icon-minus"></span></button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php endforeach; endif; ?>
+                    <?php endforeach;
+                    endif; ?>
                 </div>
                 <div class="form-row">
                     <div class="col-md-12 mb-3">
@@ -124,22 +125,40 @@
         </div>
     </div>
 </div>
-
+<script src="<?= base_url('Assets/js/plugins/sweetalert2.js') ?>"></script>
 <script>
+
+    let email_count = "<?=$additional_emails_count?>";
+
     $('.add_email').on('click', function(e) {
         e.preventDefault();
-        $('.additional-emails').append(`
-        <div class="col-md-6 mb-3">
-            <div class="input-group">
-                <input type="email" class="form-control" name="additional_emails[]" placeholder="Email de Contacto" required>
-                <div class="input-group-append">
-                    <button class="btn btn-sm btn-danger remove_email"><span class="text-medium simple-icon-minus"></span></button>
+        if(email_count <= 4){
+            $('.additional-emails').append(`
+            <div class="col-md-6 mb-3 additional_email">
+                <div class="input-group">
+                    <input type="email" class="form-control" name="additional_emails[]" placeholder="Email de Contacto" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-danger remove_email"><span class="text-medium simple-icon-minus"></span></button>
+                    </div>
                 </div>
-            </div>
-        </div>`);
+            </div>`);
+            email_count++;
+        }else{
+            Swal.fire({
+                title : 'Warning',
+                text : 'You cannot Add more than 5 additional Emails',
+                toast : true,
+                timer : 2000,
+                position : 'top-end',
+                showConfirmButton : false,
+                showConfirmButton : false,
+                icon : 'warning'
+            });
+        }
     });
 
     $(document).on('click', '.remove_email', function() {
-        $(this).closest('.col-md-6').remove();
+        $(this).closest('.additional_email').remove();
+        email_count--;
     });
 </script>

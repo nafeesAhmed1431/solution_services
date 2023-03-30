@@ -343,16 +343,14 @@ class Admin extends CI_Controller
 	///////////////////////////////////////////// CHECKLISTS FUNCTIONS //////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public function checklist_details($id)
-	{
-		$data['pageHeading'] = 'CheckLists';
+	public function checklist_details($id){
+		$data['pageHeading'] = $this->Commons_model->get_row_select('title', 'tbl_lists', ['id'=>$id])->title;
 		$data['lists'] = $this->Admin_model->get_checklists($id);
 		$data['list_id'] = $id;
 		$this->load_view('Project/', 'checklists', $data);
 	}
 
-	public function delete_checklistlist()
-	{
+	public function delete_checklistlist(){
 		echo json_encode([
 			'res' => $this->Commons_model->update(
 				['delete_bit' => 1],

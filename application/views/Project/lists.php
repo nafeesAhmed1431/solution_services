@@ -52,7 +52,7 @@
                                       <?php else : ?>
                                         <a title="Delete" class="btn btn-icon" id="btnDelete" onclick="btn_delete_list(this,<?php echo $list->id; ?>);" data-id="1" href="javascript:void(0);"><i class="simple-icon-trash" aria-hidden="true"></i></a>
                                       <?php endif; ?>
-                                        <a title="View" class="btn btn-icon" data-id="1" href="<?= base_url('Admin/checklist_details/' . $list->id); ?>"><i class="simple-icon-eye" aria-hidden="true"></i></a>
+                                        <a title="View Checklists of this List" class="btn btn-icon" data-id="1" href="<?= base_url('Admin/checklist_details/' . $list->id); ?>"><i class="simple-icon-eye" aria-hidden="true"></i></a>
                                       </td>   
                                 </tr>
                                 <?php endforeach; ?>
