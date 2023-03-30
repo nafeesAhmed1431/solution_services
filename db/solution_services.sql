@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2023 at 11:08 AM
+-- Generation Time: Mar 30, 2023 at 11:02 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -78,6 +78,7 @@ CREATE TABLE `tbl_checklists` (
   `title` varchar(255) DEFAULT NULL,
   `link` varchar(100) DEFAULT NULL,
   `list_id` int(11) DEFAULT NULL,
+  `process_id` int(11) DEFAULT NULL,
   `enable_bit` tinyint(1) DEFAULT 1,
   `delete_bit` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -86,138 +87,151 @@ CREATE TABLE `tbl_checklists` (
 -- Dumping data for table `tbl_checklists`
 --
 
-INSERT INTO `tbl_checklists` (`id`, `title`, `link`, `list_id`, `enable_bit`, `delete_bit`) VALUES
-(1, '1.	Gestión de Carta No Objeción al Uso de Suelo y Edificaciones.', NULL, 1, 1, 0),
-(2, '- Certificado de Títulos de Propiedad de ambos lados. Certificado de Títulos de Propiedad de ambos lados. ', NULL, 1, 1, 0),
-(3, 'Resellados de plano', NULL, 1, 0, 1),
-(4, '1.	Gestión Certificado de Registro de Impacto Mínimo, Constancias Ambientales, Permisos Ambientales y Licencia Ambiental.', NULL, 2, 1, 0),
-(5, '2.	Gestión Informe de Cumplimiento Ambiental (ICA).', NULL, 2, 1, 0),
-(6, '3.	Supervisión de Cumplimiento Ambiental. ', NULL, 2, 1, 0),
-(7, '4.	Asesoría Manejo de residuos líquidos, solidos, oleoso o especificados (hospitalarios o biomédicos).', NULL, 2, 1, 0),
-(8, 'Carta de No Objeción.', NULL, 3, 1, 0),
-(9, 'Carta de Renovación de permisos.', NULL, 3, 1, 0),
-(10, 'Resellados de planos.', NULL, 3, 1, 0),
-(11, 'Licencias de Operaciones.', NULL, 3, 1, 0),
-(12, 'Licencia de Construcción', NULL, 4, 1, 0),
-(13, 'Renovación de Licencia.', NULL, 4, 1, 0),
-(14, 'Copias de Licencias.', NULL, 4, 1, 0),
-(15, 'Solicitud  Inicio de Obra.', NULL, 4, 1, 0),
-(16, 'Replanteo de inmuebles', NULL, 5, 1, 0),
-(17, 'Deslindes, Subdivisión y Refundición. ', NULL, 5, 1, 0),
-(18, 'Régimen de Condominio.', NULL, 5, 1, 0),
-(20, 'Carta de aprobación para la conexión.', NULL, 6, 1, 0),
-(21, 'Certificado de Títulos de Propiedad de ambos lados.', NULL, 7, 1, 0),
-(22, 'Contrato de venta de no tener los títulos a nombre del propietario final.', NULL, 7, 1, 0),
-(23, 'Planos de Mensura Catastral con las Coordenadas UTM.', NULL, 7, 1, 0),
-(24, 'Acta de RNC y Registro Mercantil de la empresa propietaria.', NULL, 7, 1, 0),
-(25, 'Documento de identidad de los socios de la empresa propietaria', NULL, 7, 1, 0),
-(26, 'Documento de identidad y carnet del CODIA del Arquitecto', NULL, 7, 1, 0),
-(27, 'Carta de acreditación', NULL, 7, 1, 0),
-(28, 'Memoria descriptiva del proyecto, según la naturaleza del mismo: tipo de infraestructura, cantidad y fuentes de servicios generales (agua, energía eléctrica, residuos sólidos, etc.).', NULL, 7, 1, 0),
-(29, 'Fotos actuales del terreno.', NULL, 7, 1, 0),
-(30, 'Análisis del presupuesto del proyecto.', NULL, 7, 1, 0),
-(31, 'Juego de planos arquitectónicos de manera digital PDF.', NULL, 7, 1, 0),
-(32, 'Planos Estructurales de manera digital (PDF).', NULL, 7, 1, 0),
-(33, 'Memoria de Cálculos Estructurales firmada por el responsable del diseño de manera digital (PDF) y Análisis de Cargas en Etabs o Safe.', NULL, 7, 1, 0),
-(34, 'Planos Eléctricos de manera digital (PDF).', NULL, 7, 1, 0),
-(35, 'Planos Sanitarios de manera digital (PDF).', NULL, 7, 1, 0),
-(36, 'Memoria de Cálculos Sanitarios firmada por el responsable del diseño de manera digital (PDF)', NULL, 7, 1, 0),
-(37, 'Estudio de suelo firmado de manera digital (PDF).', NULL, 7, 1, 0),
-(38, 'Carnet del CODIA del estructuralista, eléctricos y sanitario.', NULL, 7, 1, 0),
-(39, 'Juego de planos arquitectónicos de manera física firmados por el arquitecto y propietario en tamaño 24”x36” y 11”x17”', NULL, 7, 1, 0),
-(40, '5.	Estudio de Impacto Ambiental', NULL, 2, 1, 0),
-(41, '- Certificado de Títulos de Propiedad de ambos lados. ', NULL, 2, 1, 0),
-(42, '- Contrato de venta. ', NULL, 2, 1, 0),
-(43, 'CONFOTUR.', NULL, 3, 1, 0),
-(44, 'Gestión de solicitud de supervisión.', NULL, 4, 1, 0),
-(45, 'Carta de aprobación para el abastecimiento.', NULL, 8, 1, 0),
-(46, 'Carta de aprobación.', NULL, 9, 1, 0),
-(47, 'Licencia de operaciones de Almacenes.', NULL, 10, 1, 0),
-(48, 'Licencia de operaciones de Estaciones.', NULL, 10, 1, 0),
-(49, 'Certificación para locales Industriales.', NULL, 10, 1, 0),
-(52, '- Planos de Mensura Catastral con las Coordenadas UTM.', NULL, 2, 1, 0),
-(60, 'let us check that if that works by adding more and more and rhen deleting it all', NULL, 18, 0, 1),
-(64, '- Contrato de venta. ', NULL, 1, 1, 0),
-(65, '- Planos de Mensura Catastral con las Coordenadas UTM.', NULL, 1, 1, 0),
-(66, '- Acta de RNC y Registro Mercantil de la empresa propietaria.', NULL, 1, 1, 0),
-(67, '- Documento de identidad de los socios de la empresa propietaria. ', NULL, 1, 1, 0),
-(68, '- Memoria descriptiva del proyecto, según la naturaleza del mismo: tipo de infraestructura, cantidad y fuentes de servicios generales (agua, energía eléctrica, residuos sólidos, etc.). ', NULL, 1, 1, 0),
-(69, '- Juego de planos arquitectónicos de manera digital PDF', NULL, 1, 1, 0),
-(70, '- Juego de planos arquitectónicos de manera física firmados por el arquitecto y propietario en tamaño 24”x36” y 11”x17”.', NULL, 1, 1, 0),
-(71, '2.	Renovación de permisos. ', NULL, 1, 1, 0),
-(72, '- Carta No Objeción al Uso de Suelo y Edificaciones', NULL, 1, 1, 0),
-(73, '- Recibo del pago de los arbitrios.', NULL, 1, 1, 0),
-(74, '3.	Resellados de planos.', NULL, 1, 1, 0),
-(75, '- Carta No Objeción al Uso de Suelo y Edificaciones', NULL, 1, 1, 0),
-(76, '- Recibo del pago de los arbitrios.', NULL, 1, 1, 0),
-(77, '- Juego de planos arquitectónicos de manera física firmados por el arquitecto y propietario en tamaño 24”x36” y 11”x17”. ', NULL, 1, 1, 0),
-(78, '- Acta de RNC y Registro Mercantil de la empresa propietaria.', NULL, 2, 1, 0),
-(79, '- Documento de identidad de los socios de la empresa propietaria. ', NULL, 2, 1, 0),
-(80, '- Memoria descriptiva del proyecto, según la naturaleza del mismo: tipo de infraestructura, cantidad y fuentes de servicios generales (agua, energía eléctrica, residuos sólidos, etc.). ', NULL, 2, 1, 0),
-(81, '- Juego de planos arquitectónicos de manera digital PDF. ', NULL, 2, 1, 0),
-(82, '- Análisis del presupuesto del proyecto. ', NULL, 2, 1, 0),
-(83, '1.	Gestión Carta de No Objeción y Renovación de permisos. ', NULL, 20, 1, 0),
-(84, '- Certificado de Títulos de Propiedad de ambos lados. ', NULL, 20, 1, 0),
-(85, '- Contrato de venta. ', NULL, 20, 1, 0),
-(86, '- Planos de Mensura Catastral con las Coordenadas UTM.', NULL, 20, 1, 0),
-(87, '- Acta de RNC y Registro Mercantil de la empresa propietaria.', NULL, 20, 1, 0),
-(88, '- Documento de identidad de los socios de la empresa propietaria. ', NULL, 20, 1, 0),
-(89, '- Documento de identidad y carnet del CODIA del Arquitecto. ', NULL, 20, 1, 0),
-(90, '- Carta de acreditación.', NULL, 20, 1, 0),
-(91, '- Memoria descriptiva del proyecto, según la naturaleza del mismo: tipo de infraestructura, cantidad y fuentes de servicios generales (agua, energía eléctrica, residuos sólidos, etc.).  Fotos actuales del terreno.', NULL, 20, 1, 0),
-(92, '- Juego de planos arquitectónicos de manera digital PDF. ', NULL, 20, 1, 0),
-(93, '- Juego de planos arquitectónicos de manera física firmados por el arquitecto y propietario en tamaño 24”x36” y 11”x17”. ', NULL, 20, 1, 0),
-(94, '2.	Resellados de planos.', NULL, 20, 1, 0),
-(95, '- Carta No Objeción al Uso de Suelo y Edificaciones', NULL, 20, 1, 0),
-(96, '- Recibo del pago de los arbitrios.', NULL, 20, 1, 0),
-(97, '- Juego de planos arquitectónicos de manera física firmados por el arquitecto y propietario en tamaño 24”x36” y 11”x17”. ', NULL, 20, 1, 0),
-(98, '3.	Licencias de Operaciones. ', NULL, 20, 1, 0),
-(99, '- Dos cartas de referencias bancarias y tres referencias personales a nombre de la persona física o sociedad solicitante.', NULL, 20, 1, 0),
-(100, '- Certificado de Registro Mercantil vigente.', NULL, 20, 1, 0),
-(101, '- Documento de identidad del propietario. ', NULL, 20, 1, 0),
-(102, '- Certificado de No Antecedentes Judiciales del propietario. ', NULL, 20, 1, 0),
-(103, '- Certificado del registro de nombre comercial, expedido por ONAPI. ', NULL, 20, 1, 0),
-(104, '- Contrato completo de Póliza de responsabilidad civil, vigente.  ', NULL, 20, 1, 0),
-(105, '- Certificación de cumplimiento de obligaciones fiscales expedida por la Dirección General de Impuestos Internos, donde conste que el solicitante está al día en la declaración o pago de impuestos.', NULL, 20, 1, 0),
-(106, '- Certificación de balance al día de la Tesorería de la Seguridad Social (TSS).', NULL, 20, 1, 0),
-(107, '- Copia del documento que demuestre derecho de uso del inmueble donde va a operar el establecimiento.', NULL, 20, 1, 0),
-(108, '4.	CONFOTUR.', NULL, 20, 1, 0),
-(109, '- Constitución de una Compañía organizada bajo las leyes de la República Dominicana', NULL, 20, 1, 0),
-(110, '- Compañía con un capital suscrito y pagado de por lo menos RD$500,000', NULL, 20, 1, 0),
-(111, '- Fotocopia de la Cédula de Identidad y Electoral de los 7 principales accionistas', NULL, 20, 1, 0),
-(112, '- En caso de ser extranjeros, fotocopia del pasaporte y residencia', NULL, 20, 1, 0),
-(113, '- Certificado de buena conducta de los 3 principales accionistas', NULL, 20, 1, 0),
-(114, '- Certificado de No Delincuencia de los tres principales accionistas', NULL, 20, 1, 0),
-(115, '- Tres referencias personales del presidente de la compañía', NULL, 20, 1, 0),
-(116, '- Fotocopia del Certificado de Registro de Nombre Comercial', NULL, 20, 1, 0),
-(117, '- Fotocopia del Registro Mercantil', NULL, 20, 1, 0),
-(118, '- Certificaciones de las deudas (incluyen cooperativas, financieras, bancos, entre otras).', NULL, 20, 1, 0),
-(119, '- Memoria descriptiva del proyecto, con fotografías o perspectivas', NULL, 20, 1, 0),
-(120, '- Proyecto arquitectónico y ubicación del mismo, indicando sus coordenadas expresadas en el sistema de coordenadas Universal Transversal de Mercator (UTM).', NULL, 20, 1, 0),
-(121, '- Copias de certificados de títulos.', NULL, 20, 1, 0),
-(122, '- Autorización ambiental vigente emitida por el Ministerio de Medio Ambiente y Recursos Naturales.', NULL, 20, 1, 0),
-(123, '- Aprobación de los organismos municipales.', NULL, 20, 1, 0),
-(124, '- Resolución de No Objeción de Uso de Suelo emitida por el Ministerio de Turismo.', NULL, 20, 1, 0),
-(125, '- Análisis de factibilidad económica y financiera del proyecto, con los requerimientos del Ministerio de Hacienda para la elaboración del Análisis Costo Beneficio, debidamente firmado y sellado en cada página.', NULL, 20, 1, 0),
-(126, '1.	Gestión de Licencia de Construcción, renovación de Licencia', NULL, 21, 1, 0),
-(127, '- Título de propiedad definitivo de ambos lados.', NULL, 21, 1, 0),
-(128, '- Plano de Mensura Catastral con las coordenadas UTM.', NULL, 21, 1, 0),
-(129, '- Acta de RNC y Registro Mercantil de la empresa propietaria.', NULL, 21, 1, 0),
-(130, '- Documento de identidad de los socios de la empresa propietaria.', NULL, 21, 1, 0),
-(131, '- Planos arquitectónicos de manera digital (PDF).', NULL, 21, 1, 0),
-(132, '- Memoria descriptiva de manera digital (PDF).', NULL, 21, 1, 0),
-(133, '- Planos Estructurales de manera digital (PDF). ', NULL, 21, 1, 0),
-(134, '- Memoria de Cálculos Estructurales firmada por el responsable del diseño de manera digital (PDF) y Análisis de Cargas en Etabs o Safe.', NULL, 21, 1, 0),
-(135, '- Planos Eléctricos de manera digital (PDF).', NULL, 21, 1, 0),
-(136, '- Planos Sanitarios de manera digital (PDF).', NULL, 21, 1, 0),
-(137, '- Memoria de Cálculos Sanitarios firmada por el responsable del diseño de manera digital (PDF).', NULL, 21, 1, 0),
-(138, '- Estudio de suelo firmado de manera digital (PDF). ', NULL, 21, 1, 0),
-(139, '- Carnet del CODIA del estructuralista, eléctricos y sanitario.', NULL, 21, 1, 0),
-(140, '- Aprobaciones del Ayuntamiento, Medio Ambiente y Turismo. ', NULL, 21, 1, 0),
-(141, '2.	Gestión copias de Licencias. ', NULL, 21, 1, 0),
-(142, '- Fotocopia de la Licencia emitida. ', NULL, 21, 1, 0),
-(143, '3.	Solicitud Inicio de Obra. ', NULL, 21, 1, 0),
-(144, '- Aprobación de las áreas de estructura, geotécnica y arquitectura.   ', NULL, 21, 1, 0);
+INSERT INTO `tbl_checklists` (`id`, `title`, `link`, `list_id`, `process_id`, `enable_bit`, `delete_bit`) VALUES
+(1, '1.	Gestión de Carta No Objeción al Uso de Suelo y Edificaciones.', NULL, 1, 4, 1, 0),
+(2, '- Certificado de Títulos de Propiedad de ambos lados. Certificado de Títulos de Propiedad de ambos lados. ', NULL, 1, 2, 1, 0),
+(3, 'Resellados de plano', NULL, 1, NULL, 0, 1),
+(4, '1.	Gestión Certificado de Registro de Impacto Mínimo, Constancias Ambientales, Permisos Ambientales y Licencia Ambiental.', NULL, 2, NULL, 1, 0),
+(5, '2.	Gestión Informe de Cumplimiento Ambiental (ICA).', NULL, 2, NULL, 1, 0),
+(6, '3.	Supervisión de Cumplimiento Ambiental. ', NULL, 2, NULL, 1, 0),
+(7, '4.	Asesoría Manejo de residuos líquidos, solidos, oleoso o especificados (hospitalarios o biomédicos).', NULL, 2, NULL, 1, 0),
+(8, 'Carta de No Objeción.', NULL, 3, NULL, 1, 0),
+(9, 'Carta de Renovación de permisos.', NULL, 3, NULL, 1, 0),
+(10, 'Resellados de planos.', NULL, 3, NULL, 1, 0),
+(11, 'Licencias de Operaciones.', NULL, 3, NULL, 1, 0),
+(12, 'Licencia de Construcción', NULL, 4, NULL, 1, 0),
+(13, 'Renovación de Licencia.', NULL, 4, NULL, 1, 0),
+(14, 'Copias de Licencias.', NULL, 4, NULL, 1, 0),
+(15, 'Solicitud  Inicio de Obra.', NULL, 4, NULL, 1, 0),
+(16, 'Replanteo de inmuebles', NULL, 5, NULL, 1, 0),
+(17, 'Deslindes, Subdivisión y Refundición. ', NULL, 5, NULL, 1, 0),
+(18, 'Régimen de Condominio.', NULL, 5, NULL, 1, 0),
+(20, 'Carta de aprobación para la conexión.', NULL, 6, NULL, 1, 0),
+(21, 'Certificado de Títulos de Propiedad de ambos lados.', NULL, 7, NULL, 1, 0),
+(22, 'Contrato de venta de no tener los títulos a nombre del propietario final.', NULL, 7, NULL, 1, 0),
+(23, 'Planos de Mensura Catastral con las Coordenadas UTM.', NULL, 7, NULL, 1, 0),
+(24, 'Acta de RNC y Registro Mercantil de la empresa propietaria.', NULL, 7, NULL, 1, 0),
+(25, 'Documento de identidad de los socios de la empresa propietaria', NULL, 7, NULL, 1, 0),
+(26, 'Documento de identidad y carnet del CODIA del Arquitecto', NULL, 7, NULL, 1, 0),
+(27, 'Carta de acreditación', NULL, 7, NULL, 1, 0),
+(28, 'Memoria descriptiva del proyecto, según la naturaleza del mismo: tipo de infraestructura, cantidad y fuentes de servicios generales (agua, energía eléctrica, residuos sólidos, etc.).', NULL, 7, NULL, 1, 0),
+(29, 'Fotos actuales del terreno.', NULL, 7, NULL, 1, 0),
+(30, 'Análisis del presupuesto del proyecto.', NULL, 7, NULL, 1, 0),
+(31, 'Juego de planos arquitectónicos de manera digital PDF.', NULL, 7, NULL, 1, 0),
+(32, 'Planos Estructurales de manera digital (PDF).', NULL, 7, NULL, 1, 0),
+(33, 'Memoria de Cálculos Estructurales firmada por el responsable del diseño de manera digital (PDF) y Análisis de Cargas en Etabs o Safe.', NULL, 7, NULL, 1, 0),
+(34, 'Planos Eléctricos de manera digital (PDF).', NULL, 7, NULL, 1, 0),
+(35, 'Planos Sanitarios de manera digital (PDF).', NULL, 7, NULL, 1, 0),
+(36, 'Memoria de Cálculos Sanitarios firmada por el responsable del diseño de manera digital (PDF)', NULL, 7, NULL, 1, 0),
+(37, 'Estudio de suelo firmado de manera digital (PDF).', NULL, 7, NULL, 1, 0),
+(38, 'Carnet del CODIA del estructuralista, eléctricos y sanitario.', NULL, 7, NULL, 1, 0),
+(39, 'Juego de planos arquitectónicos de manera física firmados por el arquitecto y propietario en tamaño 24”x36” y 11”x17”', NULL, 7, NULL, 1, 0),
+(40, '5.	Estudio de Impacto Ambiental', NULL, 2, NULL, 1, 0),
+(41, '- Certificado de Títulos de Propiedad de ambos lados. ', NULL, 2, NULL, 1, 0),
+(42, '- Contrato de venta. ', NULL, 2, NULL, 1, 0),
+(43, 'CONFOTUR.', NULL, 3, NULL, 1, 0),
+(44, 'Gestión de solicitud de supervisión.', NULL, 4, NULL, 1, 0),
+(45, 'Carta de aprobación para el abastecimiento.', NULL, 8, NULL, 1, 0),
+(46, 'Carta de aprobación.', NULL, 9, NULL, 1, 0),
+(47, 'Licencia de operaciones de Almacenes.', NULL, 10, NULL, 1, 0),
+(48, 'Licencia de operaciones de Estaciones.', NULL, 10, NULL, 1, 0),
+(49, 'Certificación para locales Industriales.', NULL, 10, NULL, 1, 0),
+(52, '- Planos de Mensura Catastral con las Coordenadas UTM.', NULL, 2, NULL, 1, 0),
+(60, 'let us check that if that works by adding more and more and rhen deleting it all', NULL, 18, NULL, 0, 1),
+(64, '- Contrato de venta. ', NULL, 1, NULL, 1, 0),
+(65, '- Planos de Mensura Catastral con las Coordenadas UTM.', NULL, 1, NULL, 1, 0),
+(66, '- Acta de RNC y Registro Mercantil de la empresa propietaria.', NULL, 1, NULL, 1, 0),
+(67, '- Documento de identidad de los socios de la empresa propietaria. ', NULL, 1, NULL, 1, 0),
+(68, '- Memoria descriptiva del proyecto, según la naturaleza del mismo: tipo de infraestructura, cantidad y fuentes de servicios generales (agua, energía eléctrica, residuos sólidos, etc.). ', NULL, 1, NULL, 1, 0),
+(69, '- Juego de planos arquitectónicos de manera digital PDF', NULL, 1, NULL, 1, 0),
+(70, '- Juego de planos arquitectónicos de manera física firmados por el arquitecto y propietario en tamaño 24”x36” y 11”x17”.', NULL, 1, NULL, 1, 0),
+(71, '2.	Renovación de permisos. ', NULL, 1, NULL, 1, 0),
+(72, '- Carta No Objeción al Uso de Suelo y Edificaciones', NULL, 1, NULL, 1, 0),
+(73, '- Recibo del pago de los arbitrios.', NULL, 1, NULL, 1, 0),
+(74, '3.	Resellados de planos.', NULL, 1, NULL, 1, 0),
+(75, '- Carta No Objeción al Uso de Suelo y Edificaciones', NULL, 1, NULL, 1, 0),
+(76, '- Recibo del pago de los arbitrios.', NULL, 1, NULL, 1, 0),
+(77, '- Juego de planos arquitectónicos de manera física firmados por el arquitecto y propietario en tamaño 24”x36” y 11”x17”. ', NULL, 1, NULL, 1, 0),
+(78, '- Acta de RNC y Registro Mercantil de la empresa propietaria.', NULL, 2, NULL, 1, 0),
+(79, '- Documento de identidad de los socios de la empresa propietaria. ', NULL, 2, NULL, 1, 0),
+(80, '- Memoria descriptiva del proyecto, según la naturaleza del mismo: tipo de infraestructura, cantidad y fuentes de servicios generales (agua, energía eléctrica, residuos sólidos, etc.). ', NULL, 2, NULL, 1, 0),
+(81, '- Juego de planos arquitectónicos de manera digital PDF. ', NULL, 2, NULL, 1, 0),
+(82, '- Análisis del presupuesto del proyecto. ', NULL, 2, NULL, 1, 0),
+(83, '1.	Gestión Carta de No Objeción y Renovación de permisos. ', NULL, 20, NULL, 1, 0),
+(84, '- Certificado de Títulos de Propiedad de ambos lados. ', NULL, 20, NULL, 1, 0),
+(85, '- Contrato de venta. ', NULL, 20, NULL, 1, 0),
+(86, '- Planos de Mensura Catastral con las Coordenadas UTM.', NULL, 20, NULL, 1, 0),
+(87, '- Acta de RNC y Registro Mercantil de la empresa propietaria.', NULL, 20, NULL, 1, 0),
+(88, '- Documento de identidad de los socios de la empresa propietaria. ', NULL, 20, NULL, 1, 0),
+(89, '- Documento de identidad y carnet del CODIA del Arquitecto. ', NULL, 20, NULL, 1, 0),
+(90, '- Carta de acreditación.', NULL, 20, NULL, 1, 0),
+(91, '- Memoria descriptiva del proyecto, según la naturaleza del mismo: tipo de infraestructura, cantidad y fuentes de servicios generales (agua, energía eléctrica, residuos sólidos, etc.).  Fotos actuales del terreno.', NULL, 20, NULL, 1, 0),
+(92, '- Juego de planos arquitectónicos de manera digital PDF. ', NULL, 20, NULL, 1, 0),
+(93, '- Juego de planos arquitectónicos de manera física firmados por el arquitecto y propietario en tamaño 24”x36” y 11”x17”. ', NULL, 20, NULL, 1, 0),
+(94, '2.	Resellados de planos.', NULL, 20, NULL, 1, 0),
+(95, '- Carta No Objeción al Uso de Suelo y Edificaciones', NULL, 20, NULL, 1, 0),
+(96, '- Recibo del pago de los arbitrios.', NULL, 20, NULL, 1, 0),
+(97, '- Juego de planos arquitectónicos de manera física firmados por el arquitecto y propietario en tamaño 24”x36” y 11”x17”. ', NULL, 20, NULL, 1, 0),
+(98, '3.	Licencias de Operaciones. ', NULL, 20, NULL, 1, 0),
+(99, '- Dos cartas de referencias bancarias y tres referencias personales a nombre de la persona física o sociedad solicitante.', NULL, 20, NULL, 1, 0),
+(100, '- Certificado de Registro Mercantil vigente.', NULL, 20, NULL, 1, 0),
+(101, '- Documento de identidad del propietario. ', NULL, 20, NULL, 1, 0),
+(102, '- Certificado de No Antecedentes Judiciales del propietario. ', NULL, 20, NULL, 1, 0),
+(103, '- Certificado del registro de nombre comercial, expedido por ONAPI. ', NULL, 20, NULL, 1, 0),
+(104, '- Contrato completo de Póliza de responsabilidad civil, vigente.  ', NULL, 20, NULL, 1, 0),
+(105, '- Certificación de cumplimiento de obligaciones fiscales expedida por la Dirección General de Impuestos Internos, donde conste que el solicitante está al día en la declaración o pago de impuestos.', NULL, 20, NULL, 1, 0),
+(106, '- Certificación de balance al día de la Tesorería de la Seguridad Social (TSS).', NULL, 20, NULL, 1, 0),
+(107, '- Copia del documento que demuestre derecho de uso del inmueble donde va a operar el establecimiento.', NULL, 20, NULL, 1, 0),
+(108, '4.	CONFOTUR.', NULL, 20, NULL, 1, 0),
+(109, '- Constitución de una Compañía organizada bajo las leyes de la República Dominicana', NULL, 20, NULL, 1, 0),
+(110, '- Compañía con un capital suscrito y pagado de por lo menos RD$500,000', NULL, 20, NULL, 1, 0),
+(111, '- Fotocopia de la Cédula de Identidad y Electoral de los 7 principales accionistas', NULL, 20, NULL, 1, 0),
+(112, '- En caso de ser extranjeros, fotocopia del pasaporte y residencia', NULL, 20, NULL, 1, 0),
+(113, '- Certificado de buena conducta de los 3 principales accionistas', NULL, 20, NULL, 1, 0),
+(114, '- Certificado de No Delincuencia de los tres principales accionistas', NULL, 20, NULL, 1, 0),
+(115, '- Tres referencias personales del presidente de la compañía', NULL, 20, NULL, 1, 0),
+(116, '- Fotocopia del Certificado de Registro de Nombre Comercial', NULL, 20, NULL, 1, 0),
+(117, '- Fotocopia del Registro Mercantil', NULL, 20, NULL, 1, 0),
+(118, '- Certificaciones de las deudas (incluyen cooperativas, financieras, bancos, entre otras).', NULL, 20, NULL, 1, 0),
+(119, '- Memoria descriptiva del proyecto, con fotografías o perspectivas', NULL, 20, NULL, 1, 0),
+(120, '- Proyecto arquitectónico y ubicación del mismo, indicando sus coordenadas expresadas en el sistema de coordenadas Universal Transversal de Mercator (UTM).', NULL, 20, NULL, 1, 0),
+(121, '- Copias de certificados de títulos.', NULL, 20, NULL, 1, 0),
+(122, '- Autorización ambiental vigente emitida por el Ministerio de Medio Ambiente y Recursos Naturales.', NULL, 20, NULL, 1, 0),
+(123, '- Aprobación de los organismos municipales.', NULL, 20, NULL, 1, 0),
+(124, '- Resolución de No Objeción de Uso de Suelo emitida por el Ministerio de Turismo.', NULL, 20, NULL, 1, 0),
+(125, '- Análisis de factibilidad económica y financiera del proyecto, con los requerimientos del Ministerio de Hacienda para la elaboración del Análisis Costo Beneficio, debidamente firmado y sellado en cada página.', NULL, 20, NULL, 1, 0),
+(126, '1.	Gestión de Licencia de Construcción, renovación de Licencia', NULL, 21, NULL, 1, 0),
+(127, '- Título de propiedad definitivo de ambos lados.', NULL, 21, NULL, 1, 0),
+(128, '- Plano de Mensura Catastral con las coordenadas UTM.', NULL, 21, NULL, 1, 0),
+(129, '- Acta de RNC y Registro Mercantil de la empresa propietaria.', NULL, 21, NULL, 1, 0),
+(130, '- Documento de identidad de los socios de la empresa propietaria.', NULL, 21, NULL, 1, 0),
+(131, '- Planos arquitectónicos de manera digital (PDF).', NULL, 21, NULL, 1, 0),
+(132, '- Memoria descriptiva de manera digital (PDF).', NULL, 21, NULL, 1, 0),
+(133, '- Planos Estructurales de manera digital (PDF). ', NULL, 21, NULL, 1, 0),
+(134, '- Memoria de Cálculos Estructurales firmada por el responsable del diseño de manera digital (PDF) y Análisis de Cargas en Etabs o Safe.', NULL, 21, NULL, 1, 0),
+(135, '- Planos Eléctricos de manera digital (PDF).', NULL, 21, NULL, 1, 0),
+(136, '- Planos Sanitarios de manera digital (PDF).', NULL, 21, NULL, 1, 0),
+(137, '- Memoria de Cálculos Sanitarios firmada por el responsable del diseño de manera digital (PDF).', NULL, 21, NULL, 1, 0),
+(138, '- Estudio de suelo firmado de manera digital (PDF). ', NULL, 21, NULL, 1, 0),
+(139, '- Carnet del CODIA del estructuralista, eléctricos y sanitario.', NULL, 21, NULL, 1, 0),
+(140, '- Aprobaciones del Ayuntamiento, Medio Ambiente y Turismo. ', NULL, 21, NULL, 1, 0),
+(141, '2.	Gestión copias de Licencias. ', NULL, 21, NULL, 1, 0),
+(142, '- Fotocopia de la Licencia emitida. ', NULL, 21, NULL, 1, 0),
+(143, '3.	Solicitud Inicio de Obra. ', NULL, 21, NULL, 1, 0),
+(144, '- Aprobación de las áreas de estructura, geotécnica y arquitectura.   ', NULL, 21, NULL, 1, 0),
+(145, 'new check list', NULL, 20, NULL, 1, 0),
+(146, 'test checklist 1', NULL, 30, NULL, 1, 1),
+(147, 'this is to cehck', NULL, 30, NULL, 1, 1),
+(148, 'i can do this', NULL, 30, NULL, 1, 1),
+(149, 'chekc', NULL, 30, NULL, 1, 1),
+(150, 'THIS CAN BE CHECKED', NULL, 30, NULL, 1, 1),
+(151, 'this is new checklist', NULL, 30, NULL, 1, 1),
+(152, 'NEW', NULL, 30, NULL, 1, 1),
+(153, 'THIS IS EDITTED 23', NULL, 31, NULL, 0, 0),
+(154, 'this is second', NULL, 31, NULL, 1, 0),
+(155, 'this is to cehck', NULL, 1, NULL, 1, 1),
+(156, 'this is to check', NULL, 1, 2, 1, 0),
+(157, 'xasd', NULL, 1, 4, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -287,7 +301,10 @@ INSERT INTO `tbl_lists` (`id`, `title`, `mk_status`, `index`, `created_at`, `ena
 (25, 'check', NULL, 0, '2023-03-29 10:00:01', 0, 1),
 (26, 'this is to check list', NULL, 0, '2023-03-29 10:00:22', 0, 1),
 (27, 'this is to checklist and this is editted too', NULL, 0, '2023-03-29 10:00:47', 0, 1),
-(28, 'new', NULL, 0, '2023-03-29 11:08:28', 1, 0);
+(28, 'new', NULL, 0, '2023-03-29 11:08:28', 0, 1),
+(29, 'new', NULL, 0, '2023-03-29 11:19:28', 0, 1),
+(30, 'test checklist', NULL, 0, '2023-03-29 12:11:04', 0, 1),
+(31, 'NEW', NULL, 0, '2023-03-29 13:05:18', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -320,7 +337,7 @@ INSERT INTO `tbl_modules` (`id`, `title`, `link`, `icon`, `location`, `enable_bi
 (7, 'Ajustes', 'Settings', 'setting.svg', '1', 0, 1, '2022-09-02 00:15:39.0'),
 (9, 'Usuarios', 'Users', 'simple-icon-user', '1', 1, 0, '2022-09-02 00:15:39.0'),
 (10, 'Listas', 'Lists', 'simple-icon-list', '1', 1, 0, '2022-09-02 00:15:39.0'),
-(11, 'Todos los Proyectos', 'AllProjects', 'simple-icon-layers', '1', 1, 0, '2022-09-02 00:15:39.0');
+(11, 'Todos los Proyectos', 'AllProjects', 'simple-icon-layers', '1', 0, 0, '2022-09-02 00:15:39.0');
 
 -- --------------------------------------------------------
 
@@ -370,6 +387,29 @@ INSERT INTO `tbl_permissions` (`id`, `role_id`, `module_id`, `create_`, `edit_`,
 (22, 4, 4, 0, 0, 0, 1, 1, 0, '0000-00-00 00:00:00'),
 (23, 4, 5, 0, 0, 0, 0, 1, 0, '0000-00-00 00:00:00'),
 (24, 4, 6, 0, 0, 0, 0, 1, 0, '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_process`
+--
+
+CREATE TABLE `tbl_process` (
+  `id` int(11) NOT NULL,
+  `title` varchar(1000) DEFAULT NULL,
+  `enable_bit` tinyint(1) DEFAULT NULL,
+  `delete_bit` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_process`
+--
+
+INSERT INTO `tbl_process` (`id`, `title`, `enable_bit`, `delete_bit`) VALUES
+(1, 'first process check', 1, 0),
+(2, 'MANGO PROCESS', 1, 0),
+(3, 'new peocess', 1, 0),
+(4, 'check', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -1488,7 +1528,7 @@ CREATE TABLE `tbl_users` (
 --
 
 INSERT INTO `tbl_users` (`id`, `full_name`, `user_name`, `password`, `cnic`, `email`, `gender`, `img`, `qr_img`, `bg_img`, `address`, `job_title`, `contact`, `joining_date`, `badge`, `created_at`, `modified_at`, `last_login`, `role_id`, `user_theme`, `enable_bit`, `delete_bit`) VALUES
-(1, 'Super Admin', 'super', 'hain123', NULL, 'info@masonicdues.com', 'Male', 'profile.jpg', 'member_awais.png', '1662407635big-buck-bunny-poster.jpg', 'Gujranwala', 'Administrator', '030000000', '2018-09-10 00:00:00', 1, '2018-09-10 00:00:00', '2023-03-29 08:53:03', '2023-03-29 10:53:03', 1, 1, b'1', b'0'),
+(1, 'Super Admin', 'super', 'hain123', NULL, 'info@masonicdues.com', 'Male', 'profile.jpg', 'member_awais.png', '1662407635big-buck-bunny-poster.jpg', 'Gujranwala', 'Administrator', '030000000', '2018-09-10 00:00:00', 1, '2018-09-10 00:00:00', '2023-03-30 05:05:05', '2023-03-30 07:05:05', 1, 1, b'1', b'0'),
 (2, 'Admin', 'admin', NULL, '0000000000', 'nafees1431@gmail.com', 'Male', '1664367585dtss.JPG', 'member_awais.png', '1662229586genoise-thumb.jpg', 'Punta Cana', 'Admin', '47328903243298', '2022-08-20 00:18:10', 1, '2022-11-14 09:51:09', '2022-11-14 09:51:09', '2022-11-01 10:47:36', 2, 1, b'1', b'0'),
 (3, 'Salman Ahmed', 'member', 'hain123', NULL, 'salman1431@gmail.com', 'Male', 'profile2.jpg', 'member_awais.png', NULL, 'Gujranwala', 'Member', '0345000000', NULL, 2, '2022-08-20 00:18:10', '2022-11-01 09:51:07', '2022-09-14 13:04:07', 2, 0, b'0', b'1'),
 (40, 'CHEKC', 'check', 'hain123', '46328754367', 'check@gmail.com', 'Male', NULL, NULL, NULL, 'misc address', NULL, '436278534', NULL, NULL, '2022-10-27 07:23:09', '2022-10-27 10:26:51', '2022-10-27 10:26:11', 2, 0, b'0', b'0'),
@@ -1535,6 +1575,12 @@ ALTER TABLE `tbl_modules`
 -- Indexes for table `tbl_permissions`
 --
 ALTER TABLE `tbl_permissions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_process`
+--
+ALTER TABLE `tbl_process`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1587,7 +1633,7 @@ ALTER TABLE `tbl_access`
 -- AUTO_INCREMENT for table `tbl_checklists`
 --
 ALTER TABLE `tbl_checklists`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
 
 --
 -- AUTO_INCREMENT for table `tbl_email_logs`
@@ -1599,13 +1645,19 @@ ALTER TABLE `tbl_email_logs`
 -- AUTO_INCREMENT for table `tbl_lists`
 --
 ALTER TABLE `tbl_lists`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `tbl_modules`
 --
 ALTER TABLE `tbl_modules`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `tbl_process`
+--
+ALTER TABLE `tbl_process`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tbl_projects`

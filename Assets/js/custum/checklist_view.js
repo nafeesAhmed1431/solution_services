@@ -5,10 +5,36 @@ $('.edit_checklist').on('click', function () {
     var text = $(this).closest('tr').find('td:eq(1)').text();
     var clid = $(this).data('clid');
     Swal.fire({
-        title: 'Update "' + text + '"',
-        html: `<input type="text" class="form-control" id="new_title" value="${text}" placeholder="Enter Checklist Name">`,
+        title: 'Update Checklist',
+        html: `<input type="text" class="form-control mb-3" id="new_title" value="${text}" placeholder="Enter Checklist Name">
+               <select id="process" class="form-control"></select>`,
         showCancelButton: true,
         showConfirmButton: true,
+        onOpen: function () {
+            $.ajax({
+                url: baseUrl + 'Admin/pre_edit_checklist',
+                method: 'GET',
+                dataType: 'JSON',
+                data: { clid: clid },
+                success: res => {
+                    if (res.data) {
+                        let options = '';
+                        for (let i of res.data)
+                            options += `<option value="${i.id}" ${res.pid == i.id ? "selected" : ""}>${i.title}</option>`;
+                        $('#process').append(options);
+                    }
+                }
+            });
+        },
+        preConfirm: function () {
+            return new Promise(function (resolve, reject) {
+                if ($('#new_title').val() == "" || $('#process').val() == "") {
+                    reject("Please fill in all required fields!");
+                } else {
+                    resolve([$('#new_title').val(), $('#process').val()]);
+                }
+            })
+        }
     }).then(res => {
         if (res.isConfirmed) {
             $.ajax({
@@ -16,7 +42,8 @@ $('.edit_checklist').on('click', function () {
                 method: 'GET',
                 dataType: 'JSON',
                 data: {
-                    title: $('#new_title').val(),
+                    title: res.value[0],
+                    process_id: res.value[1],
                     clid: clid
                 },
                 success: result => {
@@ -48,32 +75,54 @@ $('.edit_checklist').on('click', function () {
 function add_checklist(e) {
     swal({
         title: 'New Check List',
-        html: '<input type="text" id="new_checklist" class="form-control mb-3" placeholder="Enter Check List name here">',
+        html: `<input type="text" id="new_checklist" class="form-control mb-3" placeholder="Enter Check List name here">
+                <select id="process" class="form-control"></select>`,
         showCancelButton: true,
         focusConfirm: true,
         confirmButtonText: "Save it!",
+        onOpen: function () {
+            $.ajax({
+                url: baseUrl + 'Admin/get_process',
+                method: 'GET',
+                dataType: 'JSON',
+                success: res => {
+                    if (res.data) {
+                        let options = '';
+                        for (let i of res.data)
+                            options += `<option value="${i.id}">${i.title}</option>`;
+                        $('#process').append(options);
+                    }
+                },
+                error: res => {
+                    sweet_toast('Info', 'Something went wrong. Please try again later.', 'info')
+                }
+            });
+        },
         preConfirm: function () {
             return new Promise(function (resolve, reject) {
-                if ($('#new_checklist').val() == "") { reject("Checklist Name is Required! "); }
-                resolve([
-                    $('#new_checklist').val(),
-                ])
+                if ($('#new_checklist').val() == "" || $('#process').val() == "") {
+                    reject("Please fill in all required fields!");
+                } else {
+                    resolve([$('#new_checklist').val(), $('#process').val()]);
+                }
             })
         }
     }).then(function (result) {
+
         $.ajax({
             url: baseUrl + 'Admin/add_new_checklist',
             method: 'GET',
             dataType: 'json',
             data: {
                 'title': result[0],
+                'process_id': result[1],
                 'list_id': list_id
             },
             success: resuult => {
                 if (resuult.res) {
                     Swal.fire({
                         title: 'Success',
-                        text: 'Checklist Addedd Successfully.',
+                        text: 'Checklist Added Successfully.',
                         toast: true,
                         showCancelButton: false,
                         showConfirmButton: false,
@@ -89,7 +138,7 @@ function add_checklist(e) {
             },
             error: res => {
                 sweet_toast('Warning', 'Something went Wrong Please Contact System Administrator', 'warning');
-            },
+            }
         });
     }).catch(swal.noop);
 }
@@ -154,12 +203,12 @@ $('.checklist_status').on('click', function (e) {
                 status: $(this).data('status')
             },
             success: ret => {
-                if(ret.res){
-                    sweet_toast('Success', ret.status == 1 ? 'Enabled' : 'Disabled' , 'success');
-                    $(this).data('status',ret.status);
-                    if(ret.status){
+                if (ret.res) {
+                    sweet_toast('Success', ret.status == 1 ? 'Enabled' : 'Disabled', 'success');
+                    $(this).data('status', ret.status);
+                    if (ret.status) {
                         $(this).find('i').toggleClass('simple-icon-check iconsminds-close');
-                    }else{
+                    } else {
                         $(this).find('i').toggleClass('simple-icon-check iconsminds-close');
                     }
                 }

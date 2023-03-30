@@ -386,6 +386,7 @@ class Admin extends CI_Controller
 		echo  json_encode(['res' => $this->Commons_model->insert([
 			'title' => $this->input->get('title'),
 			'list_id' => $this->input->get('list_id'),
+			'process_id' => $this->input->get('process_id'),
 			'enable_bit' => '1',
 			'delete_bit' => '0'
 		], 'tbl_checklists')]);
@@ -395,7 +396,10 @@ class Admin extends CI_Controller
 	{
 		echo json_encode([
 			'res' => $this->Commons_model->update(
-				['title' => $this->input->get('title')],
+				[
+					'title' => $this->input->get('title'),
+					'process_id' => $this->input->get('process_id'),
+				],
 				['id' => $this->input->get('clid')],
 				'tbl_checklists'
 			)
@@ -411,6 +415,18 @@ class Admin extends CI_Controller
 				'tbl_checklists'
 			),
 			'status' => $this->input->get('status') == 1 ? 0 : 1
+		]);
+	}
+
+	public function pre_edit_checklist()
+	{
+		echo json_encode([
+			'data' => $this->Commons_model->get_where_select(
+				['id','title'],
+				['delete_bit' => 0,'enable_bit' => 1],
+				'tbl_process'
+			),
+			'pid' => $this->Commons_model->get_row_select('process_id','tbl_checklists',['id' => $this->input->get('clid')])->process_id
 		]);
 	}
 
@@ -449,10 +465,11 @@ class Admin extends CI_Controller
 			'res' => $this->Commons_model->update(
 				['title' => $this->input->get('title')],
 				['id' => $this->input->get('process_id')],
-				'tbl_process')
+				'tbl_process'
+			)
 		]);
 	}
-	
+
 	public function add_new_process()
 	{
 		echo  json_encode(['res' => $this->Commons_model->insert([
@@ -468,6 +485,23 @@ class Admin extends CI_Controller
 			'res' => $this->Commons_model->update(
 				['delete_bit' => 1],
 				['id' => $this->input->get('process_id')],
+				'tbl_process'
+			)
+		]);
+	}
+
+	public function get_process()
+	{
+		echo json_encode([
+			'data' => $this->Commons_model->get_where_select(
+				[
+					'id',
+					'title'
+				],
+				[
+					'delete_bit' => 0,
+					'enable_bit' => 1
+				],
 				'tbl_process'
 			)
 		]);
