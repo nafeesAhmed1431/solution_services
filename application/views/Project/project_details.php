@@ -75,12 +75,12 @@
                                                 </div>
                                             </div>
                                             <div class="row mb-1">
-                                                <div class="col-6"><input type="date" class="form-control date1" data-checklist_id="<?= $document->id ?>"></div>
-                                                <div class="col-6"><input type="date" class="form-control date2" data-checklist_id="<?= $document->id ?>"></div>
+                                                <div class="col-6"><input type="date" class="form-control date1" value="<?=$document->date_1?>" data-checklist_id="<?= $document->id ?>"></div>
+                                                <div class="col-6"><input type="date" class="form-control date2" value="<?=$document->date_2?>" data-checklist_id="<?= $document->id ?>"></div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <textarea class="form-control" rows="1" placeholder="Comments"></textarea>
+                                                    <textarea data-checklist_id="<?= $document->id ?>" class="form-control comment" rows="6" placeholder="Comments"><?=$document->comments?></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -124,3 +124,5 @@
 <?php } ?>
 
 <script src="<?= base_url('Assets/js/custum/project_details_view.js'); ?>"></script>
+<script src="<?= base_url('Assets/js/plugins/sweetalert2.js'); ?>"></script>
+

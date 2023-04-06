@@ -105,7 +105,7 @@ class Project extends CI_Controller
 		$data['documents']  = $this->Project_model->get_tbl_records($id);
 		$data['lists']       = $this->Project_model->get_project_lists();
 		$data['project_id'] = $id;
-		
+
 		$data['pageHeading'] = 'Edit Checklists';
 		$this->load_view('Project/', 'new_project_lists', $data);
 	}
@@ -328,5 +328,35 @@ class Project extends CI_Controller
 		$data['pageHeading'] 	= 'Project Checklists';
 		$data['checklists'] 	= $this->Project_model->get_project_checklists($id);
 		$this->load_view('Project/', 'new_project_lists', $data);
+	}
+
+	public function update_date1()
+	{
+		echo json_encode(['status' => $this->Commons_model->update([
+			'date_1' => $this->input->get('date')
+		], [
+			'project_id' => $this->input->get('pid'),
+			'checklist_id' => $this->input->get('clid')
+		], 'tbl_project_records')]);
+	}
+
+	public function update_date2()
+	{
+		echo json_encode(['status' => $this->Commons_model->update([
+			'date_2' => $this->input->get('date')
+		], [
+			'project_id' => $this->input->get('pid'),
+			'checklist_id' => $this->input->get('clid')
+		], 'tbl_project_records')]);
+	}
+
+	public function update_comment()
+	{
+		echo json_encode(['status' => $this->Commons_model->update([
+			'comments' => $this->input->get('comment')
+		], [
+			'project_id' => $this->input->get('pid'),
+			'checklist_id' => $this->input->get('clid')
+		], 'tbl_project_records')]);
 	}
 }

@@ -113,6 +113,92 @@ $('.list_notify').on('click', function () {
     }).catch(swal.noop());;
 });
 
-$('.date1').on('change',function(){
-    alert($(this).val());
+$('.date1').on('change', function () {
+    $.ajax({
+        url: base_url + 'project/update_date1',
+        method: 'GET',
+        dataType: 'JSON',
+        data: {
+            'date': $(this).val(),
+            'clid': $(this).data('checklist_id'),
+            'pid': pid
+        },
+        success: res => {
+            if (res.status) {
+                Swal.fire({
+                    title: 'Success',
+                    text: `Notify Date set to ${$(this).val()} Successfully`,
+                    toast: true,
+                    position: 'top-right',
+                    timer: 2500,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    icon: 'success'
+                });
+            }
+        },
+        error: res => { },
+
+
+    });
+});
+
+$('.date2').on('change', function () {
+    $.ajax({
+        url: base_url + 'project/update_date2',
+        method: 'GET',
+        dataType: 'JSON',
+        data: {
+            'date': $(this).val(),
+            'clid': $(this).data('checklist_id'),
+            'pid': pid
+        },
+        success: res => {
+            if (res.status) {
+                Swal.fire({
+                    title: 'Success',
+                    text: `Document Received Date update Successfully`,
+                    toast: true,
+                    position: 'top-right',
+                    timer: 2500,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    icon: 'success'
+                });
+            }
+        },
+        error: res => { },
+
+
+    });
+});
+
+$('.comment').on('change', function () {
+    $.ajax({
+        url: base_url + 'project/update_comment',
+        method: 'GET',
+        dataType: 'JSON',
+        data: {
+            'comment': $(this).val(),
+            'clid': $(this).data('checklist_id'),
+            'pid': pid
+        },
+        success: res => {
+            if (res.status) {
+                Swal.fire({
+                    title: 'Success',
+                    text: `Comment Updated Successfully`,
+                    toast: true,
+                    position: 'top-right',
+                    timer: 2500,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    icon: 'success'
+                });
+            }
+        },
+        error: res => { },
+
+
+    });
 });
