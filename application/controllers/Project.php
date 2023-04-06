@@ -67,6 +67,7 @@ class Project extends CI_Controller
 	public function project_details($id)
 	{
 		$data['pageHeading'] 	= 'Detalles del Proyecto';
+		$data['pid'] 	= $id;
 		$data['project'] = $this->Project_model->details('tbl_projects', $id);
 		$data['lists'] = $this->Project_model->get_lists_with_checklists($id);
 		$data['list_count'] = count($data['lists']);
@@ -84,12 +85,13 @@ class Project extends CI_Controller
 		$this->load_view('Project/', 'project_details', $data);
 	}
 
-	public function edit_project($id){
+	public function edit_project($id)
+	{
 		$data['pageHeading'] 	= 'Editar Proyecto';
-		$data['project'] 		=  $this->Project_model->details('tbl_projects',$id);
+		$data['project'] 		=  $this->Project_model->details('tbl_projects', $id);
 		$data['additional_emails'] = json_decode($data['project'][0]->additional_emails);
 		$data['additional_emails_count'] = count(json_decode($data['project'][0]->additional_emails));
-		$this->load_view('Project/','edit_project',$data);
+		$this->load_view('Project/', 'edit_project', $data);
 	}
 
 	public function update_project()
@@ -103,7 +105,7 @@ class Project extends CI_Controller
 		$data['documents']  = $this->Project_model->get_tbl_records($id);
 		$data['lists']       = $this->Project_model->get_project_lists();
 		$data['project_id'] = $id;
-
+		
 		$data['pageHeading'] = 'Edit Checklists';
 		$this->load_view('Project/', 'new_project_lists', $data);
 	}

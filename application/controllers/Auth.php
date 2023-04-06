@@ -8,9 +8,12 @@ class Auth extends CI_Controller
 		parent::__construct();
 		$this->load->library('form_validation');
 
-		$this->load->model('Auth_model');
-		$this->load->model('Admin_model');
-		$this->load->model('Project_model');
+		$this->load->model([
+			'Auth_model',
+			'Admin_model',
+			'Project_model',
+			'Commons_model'
+		]);
 	}
 
 	public function index()
@@ -148,6 +151,20 @@ class Auth extends CI_Controller
 		$html .= "<img src=" . base_url('qr_code/') . $pro[0]->qr_img . ">";
 		$em = $this->send_mail($pro[0]->contact_email, $Subject, $html, "info@solutionServices.com", "Solution Services");
 		return  $em ? redirect(base_url('Projects')) : redirect(base_url('Dashboard'));
+	}
+
+	public function notify_list()
+	{
+		$lid = $this->input->get('lid');
+		$pid = $this->input->get('pid');
+
+		$checklists = $this->Project_model->get_notification_list_items($this->input->get());
+		// $checklists = $this->Commons_model->get_where_select('checklist_id', [
+		// 	'list_id' => $lid,
+		// 	'project_id' => $pid,
+		// 	'active_bit' => 1
+		// ], 'tbl_project_records');
+		echo json_encode(['data' => $checklists]);
 	}
 
 	// public function send_mail($to, $subject, $body, $from = NULL, $from_name = NULL, $attachment = NULL, $cc = NULL, $bcc = NULL) {

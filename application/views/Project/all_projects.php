@@ -26,7 +26,7 @@
                 </div>
               </div>
               <div class="table-responsive">
-                <table id="grd" class="table icon_space dataTables-grd">
+                <table id="allProjectsTable" class="table icon_space dataTables-grd">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -38,7 +38,7 @@
                       <th class="text-center">Acción</th>
                     </tr>
                   </thead>
-                  <tbody id="grd">
+                  <tbody>
                     <?php foreach ($projects as $project) : ?>
                       <?php $curr = ($this->Project_model->current_progress($project->id)[0]->current); $max = ($this->Project_model->max_progress($project->id)[0]->max); ?>
                       <tr>
@@ -101,6 +101,6 @@
       </div>
     </section>
     <input type="hidden" id="callBackLoc" value="<?php echo base_url(); ?>" />
-    <!-- <script src="<?php //echo base_url(); ?>Assets/js/custum/all_projects_view.js"></script> -->
   </div>
 </div>
+<script src="<?= base_url('Assets/js/custum/all_projects_view.js'); ?>"></script>

@@ -1,3 +1,5 @@
+let pid = $('#pid').val();
+
 function upload_file(element) {
 
     var doc = element.files[0];
@@ -19,9 +21,9 @@ function upload_file(element) {
         data: form,
         success: function (res) {
             swal({
-                title   : "Success",
-                text    : "Documento del proyecto cargado con éxito",
-                type    : "success",
+                title: "Success",
+                text: "Documento del proyecto cargado con éxito",
+                type: "success",
                 showCancelButton: true,
                 focusConfirm: true,
                 confirmButtonText: "OK",
@@ -41,39 +43,39 @@ let refresh = (id) => {
 }
 let notify = (e) => {
     swal({
-        title   : "Confirmación",
-        text    : "¿Está seguro de que desea enviar un correo electrónico de notificación? ?",
-        type    : "info",
-        showLoaderOnConfirm : true,
-        showCancelButton    : true,
-        cancelButtonText    : "Cancelar",
-        focusConfirm        : false,
-        confirmButtonText   : "Sí, hazlo !",
-        preConfirm: function(value){
+        title: "Confirmación",
+        text: "¿Está seguro de que desea enviar un correo electrónico de notificación? ?",
+        type: "info",
+        showLoaderOnConfirm: true,
+        showCancelButton: true,
+        cancelButtonText: "Cancelar",
+        focusConfirm: false,
+        confirmButtonText: "Sí, hazlo !",
+        preConfirm: function (value) {
             return new Promise(function (resolve, reject) {
                 resolve(confirm_notify(e))
             })
         }
     });
 }
-function confirm_notify(e){
+function confirm_notify(e) {
 
-    var pid     = $(e).data('pid');
-    var lid     = $(e).data('lid');
-    var clid    = $(e).data('clid');
+    var pid = $(e).data('pid');
+    var lid = $(e).data('lid');
+    var clid = $(e).data('clid');
 
     $.ajax({
-        url: base_url+'Auth/notify_email',
+        url: base_url + 'Auth/notify_email',
         method: 'GET',
         contentType: "application/json; charset:utf-8",
         dataType: 'json',
         data: {
-            'pid'   : pid,
-            'lid'   : lid,
-            'clid'  : clid
+            'pid': pid,
+            'lid': lid,
+            'clid': clid
         },
-        success: function(res){
-            swal('Éxito','Correo electrónico de notificación enviado con éxito','success');
+        success: function (res) {
+            swal('Éxito', 'Correo electrónico de notificación enviado con éxito', 'success');
         },
         error: function (res) {
             console.log(res);
@@ -84,3 +86,33 @@ function confirm_notify(e){
         }
     });
 }
+
+$('.list_notify').on('click', function () {
+    swal({
+        title: 'Confirmation',
+        text: 'Are you Sure to Notify Client',
+        showCancelButton: true,
+        showConfirmButton: true,
+        type: 'question'
+    }).then(res => {
+        if (res) {
+            $.ajax({
+                url: base_url + 'Auth/notify_list',
+                method: 'GET',
+                dataType: 'JSON',
+                data: {
+                    'lid': $(this).data('lid'),
+                    'pid': pid
+                },
+                success: res => {
+                    alert('success');
+                },
+                error: res => { },
+            });
+        }
+    }).catch(swal.noop());;
+});
+
+$('.date1').on('change',function(){
+    alert($(this).val());
+});
