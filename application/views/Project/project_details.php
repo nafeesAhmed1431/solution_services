@@ -84,14 +84,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card-footer">
-                                            <?php if (!empty($document->file_name)) : ?>
-                                                <a class="text-small text-muted" target="_blank" href="<?= base_url('Assets/docs/') . $document->file_name ?>">Ver Documento</a>
-                                                <?php $curr++; $gpc++; ?>
-                                            <?php else : ?>
-                                                <span class="text-small text-muted">No hay documentos Subidos</span>
-                                            <?php endif; ?>
-                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <?php if (!empty($document->file_name)) : ?>
+                                            <a class="text-small text-muted" target="_blank" href="<?= base_url('Assets/docs/') . $document->file_name ?>">Ver Documento</a>
+                                            <?php $curr++; $gpc++; ?>
+                                        <?php else : ?>
+                                            <span class="text-small text-muted">No hay documentos Subidos</span>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             <?php $max++; $gpm++; endif; ?>
