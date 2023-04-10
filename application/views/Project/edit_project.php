@@ -3,7 +3,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between">
                 <h2><?= $pageHeading . " : '" . $project[0]->project_name . "'" ?></h2>
-                <a href="<?php echo base_url('Project/edit_project_checklists/') . $project[0]->id; ?>">Edit Checklists</a>
+                <a class="badge badge-info" href="<?php echo base_url('Project/edit_project_checklists/') . $project[0]->id; ?>"><i class="simple-icon-note"></i> Edit Checklists</a>
             </div>
             <hr>
             <form class=" mb-5" action="<?= base_url('UpdateProject') ?>" method="POST" enctype="multipart/form-data">

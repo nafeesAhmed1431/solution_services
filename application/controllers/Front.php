@@ -18,7 +18,8 @@ class Front extends CI_Controller
 	{
 		$this->load->view('Front/front_header');
 		$this->load->view('Front/front_navbar');
-		$this->load->view('Front/project_info',$data);
+		// $this->load->view('Front/project_info',$data);
+		$this->load->view('Front/project_info_v2',$data);
 		$this->load->view('Front/front_footer');
 	}
 
@@ -26,7 +27,7 @@ class Front extends CI_Controller
 	{
 		if(empty($id))
 		{
-			$data['check'] = 0 ;
+			$data['load_data'] = false ;
 			$data['page_text'] = "Los detalles de su proyecto se mostrarán aquí";
 			$this->load_front($data);
 		}
@@ -43,7 +44,7 @@ class Front extends CI_Controller
 
 		if(!empty($data['project']))
 		{
-			$data['check'] = 1 ;
+			$data['load_data'] = true ;
 			$data['pageHeading'] 	= 'Detalles del proyecto';
 			$data['lists'] = $this->Project_model->get_lists_with_checklists($id);
 			$data['list_count'] = count($data['lists']);
@@ -52,7 +53,7 @@ class Front extends CI_Controller
 		}
 		else
 		{
-			$data['check'] =0 ;
+			$data['load_data'] = false ;
 			$data['page_text'] = "No se encontró ningún proyecto contra [ ID:".$id." ]. Prueba con otro ID de proyecto";
 			$this->load_front($data);
 		}

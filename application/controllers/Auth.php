@@ -155,82 +155,87 @@ class Auth extends CI_Controller
 
 	public function notify_list()
 	{
-		$lid = $this->input->get('lid');
-		$pid = $this->input->get('pid');
+		$project = $this->Commons_model->get_row('tbl_projects', [
+			'id' => $this->input->get('pid')
+		]);
 
-		$checklists = $this->Project_model->get_notification_list_items($this->input->get());
-		// $checklists = $this->Commons_model->get_where_select('checklist_id', [
-		// 	'list_id' => $lid,
-		// 	'project_id' => $pid,
-		// 	'active_bit' => 1
-		// ], 'tbl_project_records');
-		echo json_encode(['data' => $checklists]);
+		$em = $this->send_mail(
+			$project->contact_email,
+			"Documento Pendiente",
+			$this->email_pending_list_template($project, $this->Project_model->get_notification_list_items($this->input->get())),
+			"info@dtss.miapprd.com",
+			"Solution Services",
+			null,
+			json_decode($project->additional_emails)
+		);
+		echo ($em == true) ? json_encode(array('status' => 200)) : false;
 	}
 
-	// public function send_mail($to, $subject, $body, $from = NULL, $from_name = NULL, $attachment = NULL, $cc = NULL, $bcc = NULL) {
-	//     $this->load->library('phpmailer_lib');
-	//     $mail = $this->phpmailer_lib->load();
-	// 	$set = $this->Auth_model->details(1,'tbl_settings')[0];
-	//     $mail->CharSet = 'UTF-8';
-	//     try {
-	//         if ($set->protocol == 'mail') {
-	//             $mail->isMail();
-	//         } elseif ($set->protocol == 'sendmail') {
-	//             $mail->isSendmail();
-	//         } elseif ($set->protocol == 'smtp') {
-	//             $mail->isSMTP();
-	//             $mail->Host = $set->smtp_host;
-	//             $mail->SMTPAuth = true;
-	//             $mail->Username = $set->smtp_user;
-	//             $mail->Password = $set->smtp_password;
-	//             $mail->SMTPSecure = !empty($set->smtp_crypto) ? $set->smtp_crypto : false;
-	//             $mail->Port = $set->smtp_port;
-	//         } else {
-	//             $mail->isMail();
-	//         }
-
-	//         if ($from && $from_name) {
-	//             $mail->setFrom($from, $from_name);
-	//             $mail->addReplyTo($from, $from_name);
-	//         } elseif ($from) {
-	//             $mail->setFrom($from, $set->site_name);
-	//             $mail->addReplyTo($from, $set->site_name);
-	//         } else {
-	//             $mail->setFrom($set->default_email, $set->site_name);
-	//             $mail->addReplyTo($set->default_email, $set->site_name);
-	//         }
-	//         $mail->addAddress($to);
-	//         if ($cc !== NULL) { 
-	// 			foreach ($cc as $email) {
-	// 				$mail->addCC($email);
-	// 			}
-	// 		}
-	// 		if ($bcc !== NULL) { 
-	// 			foreach ($bcc as $email) {
-	// 				$mail->addBCC($email);
-	// 			}
-	// 		}
-	//         $mail->Subject = $subject;
-	//         $mail->isHTML(true);
-	//         $mail->Body = $body;
-	//         if ($attachment) {
-	//             if (is_array($attachment)) {
-	//                 foreach ($attachment as $attach) {
-	//                     $mail->addAttachment($attach);
-	//                 }
-	//             } else {
-	//                 $mail->addAttachment($attachment);
-	//             }
-	//         }
-
-	// 		return $mail->send();
-
-	//     } catch (Exception $e) {
-	// 		throw new \Exception($e->getMessage());
-	//     } catch (\Exception $e) {
-	//         throw new \Exception($e->getMessage());
-	//     }
-	// }
+	public function email_pending_list_template($project, $data)
+	{
+		$temp = '
+				<div leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="height:auto !important;width:100% !important; font-family: Helvetica,Arial,sans-serif !important; margin-bottom: 40px;">
+					<center>
+						<table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" style="max-width:600px; background-color:#ffffff;border:1px solid #e4e2e2;border-collapse:separate !important; border-radius:4px;border-spacing:0;color:#242128; margin:0;padding:40px;" heigth="auto">
+							<tbody>
+								<tr>
+									<td align="left" valign="center" style="padding-bottom:40px;border-top:0;height:100% !important;width:100% !important;">
+										<img style="height : 60px; width : 200px;" src="' . base_url('Assets/img/ss-logo.png') . '">
+									</td>
+									<td align="right" valign="center" style="padding-bottom:40px;border-top:0;height:100% !important;width:100% !important;">
+										<span style="color: #8f8f8f; font-weight: normal; line-height: 2; font-size: 14px;">' . date('d.m.y') . '</span>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" style="padding-top:10px;border-top:1px solid #e4e2e2">
+										<h3 style="color:#303030; font-size:18px; line-height: 1.6; font-weight:500;">' . ucwords($project->project_name) . '</h3>
+										<p style="color:#8f8f8f; font-size: 14px; padding-bottom: 20px; line-height: 1.4;">
+											Following Documents of Project are Pending. Kindly make it sure to Submit ASAP.
+										</p>
+										<h3 style="color:#303030; font-size:18px; line-height: 1.6; font-weight:500;">Pending Documents</h3>';
+							foreach ($data as $key => $list) {
+								$temp .= '<p style="background-color:#f1f1f1; padding: 8px 15px; border-radius: 50px; display: inline-block; margin-bottom:20px; font-size: 14px;  line-height: 1.4; font-family: Courier New, Courier, monospace; margin-top:0">' . ($key + 1) . ' : ' . $list->checklist_title . '</p><br>';
+							}
+						  $temp .= '</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse;">
+											<tbody>
+												<tr>
+													<td style="padding:15px 0px;" valign="top" align="center">
+														<table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate !important;">
+															<tbody>
+																<tr>
+																	<td align="center" valign="middle" style="padding:13px;">
+																		<a href="'.base_url('State/'.$project->id).'" title="View" target="_blank" style="font-size: 14px; line-height: 1.5; font-weight: 700; letter-spacing: 1px; padding: 15px 40px; text-align:center; text-decoration:none; color:#FFFFFF; border-radius: 50px; background-color:#145388;">View List</a>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<table style="margin-top:30px; padding-bottom:20px;; margin-bottom: 40px;">
+							<tbody>
+								<tr>
+									<td align="center" valign="center">
+										<p style="font-size: 12px; text-decoration: none;line-height: 1; color:#909090; margin-top:0px; ">
+											info@solutionServices.com.
+										</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</center>
+				</div>';
+		return $temp;
+	}
 
 	public function send_mail(
 		$to,

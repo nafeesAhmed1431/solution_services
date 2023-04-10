@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="<?= base_url('Assets/css/vendor/bootstrap-datepicker3.min.css'); ?>" />
     <link rel="stylesheet" href="<?= base_url('Assets/css/main.css'); ?>" />
     <link rel="stylesheet" href="<?= base_url(($this->session->userdata('theme') == 0) ? 'Assets/css/dore.light.blue.min.css' : 'Assets/css/dore.new-theme.min.css'); ?>" />
+    <!-- <link rel="stylesheet" href="<?= base_url('Assets/css/dore.dark.green.min.css')?>" /> -->
     <!-- <link rel="stylesheet" href="<?= base_url('Assets/css/custom.css'); ?>" /> -->
 
 </head>

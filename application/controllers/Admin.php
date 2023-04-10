@@ -49,7 +49,9 @@ class Admin extends CI_Controller
 	{
 		$data['pageHeading'] = 'Users';
 		$data['users'] = $this->Project_model->get_all_users();
-		$this->load_view('Project/', 'users', $data);
+		// $this->load_view('Project/', 'users', $data);
+		$this->load_view('Admin/', 'users_view_v2', $data);
+		// $this->load_view('Admin/', 'users_view_v3', $data);
 	}
 
 	public function new_user()

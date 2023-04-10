@@ -348,7 +348,18 @@ class Project_model extends CI_Model
 
     public function get_all_users()
     {
-        $res = $this->db->where(['role_id != ' => 1, 'enable_bit ' => 1, 'delete_bit' => 0])->get('tbl_users');
+        // $res = $this->db->where(['role_id != ' => 1, 'enable_bit ' => 1, 'delete_bit' => 0])->get('tbl_users');
+        // return ($res == true) ? $res->result() : false;
+
+        $res = $this->db->select('main.*, role.title as role_title')
+            ->from('tbl_users as main')
+            ->join('tbl_roles as role', 'main.role_id = role.id')
+            ->where([
+                'main.role_id !=' => 1,
+                'main.enable_bit ' => 1,
+                'main.delete_bit' => 0
+            ])
+            ->get();
         return ($res == true) ? $res->result() : false;
     }
 
@@ -487,7 +498,18 @@ class Project_model extends CI_Model
         return $res ? $res->result() : false;
     }
 
-    public function get_notification_list_items(){
-        
+    public function get_notification_list_items($data)
+    {
+        $res = $this->db->select('checklist.title as checklist_title')
+            ->from('tbl_project_records as main')
+            ->join('tbl_checklists as checklist', 'main.checklist_id = checklist.id')
+            ->where([
+                'main.list_id' => $data['lid'],
+                'main.project_id' => $data['pid'],
+                'main.active_bit' => 1,
+                'main.status' => 0,
+            ])
+            ->get();
+        return $res ? $res->result() : false;
     }
 }

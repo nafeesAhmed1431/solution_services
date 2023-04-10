@@ -300,7 +300,14 @@ class Project extends CI_Controller
 					'checklist_id'			=> $this->input->post('checklist_id'),
 				];
 				$res = $this->Project_model->insert_with('tbl_records', $data);
-				// $res = $this->Project_model->insert('tbl_records',$data);
+
+				$this->Commons_model->update([
+					'status' => 1
+				], [
+					'project_id'			=> $this->input->post('project_id'),
+					'list_id'				=> $this->input->post('list_id'),
+					'checklist_id'			=> $this->input->post('checklist_id'),
+				], 'tbl_project_records');
 				echo ($res > 0) ? json_encode(array(["status" => 200, "name" => $rowData['file_name']])) : json_encode(array("status" => 201));
 			} else {
 				echo json_encode(array('status' => 203));
@@ -357,6 +364,47 @@ class Project extends CI_Controller
 		], [
 			'project_id' => $this->input->get('pid'),
 			'checklist_id' => $this->input->get('clid')
+		], 'tbl_project_records')]);
+	}
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////PDF  FUNCTIONS /////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public function generate_project_pdf($id = null)
+	{
+
+		$this->load->library('pdf');
+
+		$project = $this->Commons_model->get_row('tbl_projects', ['id' => $id]);
+
+		// Set document information
+		$this->pdf->SetCreator('Solution Services');
+		$this->pdf->SetAuthor('info@solutionServices.com');
+		$this->pdf->SetTitle($project->project_name);
+		$this->pdf->SetSubject('Project Completion ' . $project->project_name);
+
+		// Add a page
+		$this->pdf->AddPage();
+
+		// Set some content
+		$content = '';
+
+		// Write the content to the PDF document
+		$this->pdf->writeHTML($content, true, false, true, false, '');
+
+		// Output the PDF document
+		$this->pdf->Output('my_document.pdf', 'I');
+	}
+
+	public function update_list()
+	{
+		echo json_encode(['status' => $this->Commons_model->update([
+			'active_bit' => $this->input->post('list_id') == 1 ? 0 : 1
+		], [
+			'list_id' => $this->input->post('list_id'),
+			'project_id' => $this->input->post('project_id')
 		], 'tbl_project_records')]);
 	}
 }

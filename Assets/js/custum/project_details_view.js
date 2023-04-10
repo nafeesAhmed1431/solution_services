@@ -35,12 +35,14 @@ function upload_file(element) {
         }
     });
 }
+
 let refresh = (id) => {
     setTimeout(function () {
         window.location.href = base_url + "ProjectDetails/" + id;
     }, 3000);
     // location.reload()
 }
+
 let notify = (e) => {
     swal({
         title: "Confirmación",
@@ -58,6 +60,7 @@ let notify = (e) => {
         }
     });
 }
+
 function confirm_notify(e) {
 
     var pid = $(e).data('pid');
@@ -96,6 +99,15 @@ $('.list_notify').on('click', function () {
         type: 'question'
     }).then(res => {
         if (res) {
+            swal({
+                title: "Please wait...",
+                text: "Notifying client",
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                onOpen: function () {
+                    swal.showLoading();
+                }
+            });
             $.ajax({
                 url: base_url + 'Auth/notify_list',
                 method: 'GET',
@@ -105,9 +117,23 @@ $('.list_notify').on('click', function () {
                     'pid': pid
                 },
                 success: res => {
-                    alert('success');
+                    swal.close();
+                    swal({
+                        title: "Success!",
+                        text: "The client has been notified.",
+                        type: "success",
+                        showConfirmButton: true
+                    });
                 },
-                error: res => { },
+                error: res => {
+                    swal.close();
+                    swal({
+                        title: "Error!",
+                        text: "There was an error notifying the client.",
+                        type: "error",
+                        showConfirmButton: true
+                    });
+                },
             });
         }
     }).catch(swal.noop());;
@@ -200,5 +226,59 @@ $('.comment').on('change', function () {
         error: res => { },
 
 
+    });
+});
+
+$('.do_list_notify').on('click', function () {
+    swal.fire({
+        title: 'Confirmation',
+        text: 'Are you sure you want to notify the client?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then(result => {
+        if (result.isConfirmed) {
+            swal.fire({
+                title: "Please wait...",
+                text: "Notifying client",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    swal.showLoading();
+                }
+            });
+            $.ajax({
+                url: base_url + 'Auth/notify_list',
+                method: 'GET',
+                dataType: 'JSON',
+                data: {
+                    'lid': $(this).data('lid'),
+                    'pid': pid
+                },
+                success: res => {
+                    swal.fire({
+                        title: "Success!",
+                        text: "The client has been notified.",
+                        icon: "success",
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                },
+                error: res => {
+                    swal.fire({
+                        title: "Error!",
+                        text: "There was an error notifying the client.",
+                        icon: "error",
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                },
+                complete: () => {
+                    swal.hideLoading();
+                }
+            });
+        }
     });
 });
