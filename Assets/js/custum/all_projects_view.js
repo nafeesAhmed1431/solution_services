@@ -6,6 +6,7 @@ $(document).ready(function () {
 });
 
 
+
 /// Delete Record
 let btn_delete = (element, id) => {
     alertText = 'Eliminar';
@@ -185,3 +186,22 @@ let when_completed = (e, completed) => {
         }
     }
 }
+
+$('.make_project_pdf').on('click',function(){
+    
+    let merge =  $.ajax({
+        url : base_url+'/project/gpcc',
+        method : 'POST',
+        dataType : 'JSON',
+        data : {
+            pid : $(this).data('project_id')
+        }
+    })
+
+    merge.then(res => {
+        alert('merge success')
+    })
+    merge.catch(error => {
+        console.warn(error)
+    })
+});

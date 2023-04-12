@@ -87,6 +87,7 @@
                           <?php }else{?>
                             <?php if(($curr/$max)*100 == 100): ?>
                               <a title="Marcar como completado" class="btn btn-icon" href="javascript:void(0)" onclick="update_status(this,<?= $project->id; ?>)" data-status="1"><i class="iconsminds-check" aria-hidden="true"></i></a>
+                              <a title="Make PDF" class="btn btn-icon make_project_pdf" data-project_id="<?=$project->id?>" href="javascript:void(0)"><i class=" iconsminds-file-copy"></i></a>
                             <?php endif; ?>
                           <?php }?>
                         </td>

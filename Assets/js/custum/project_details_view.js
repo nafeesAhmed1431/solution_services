@@ -1,5 +1,19 @@
 let pid = $('#pid').val();
 
+$(document).ready(function () {
+
+    $('.card-list').each(function () {
+        let list_id = $(this).data('list_id');
+        let percent = list_percentages[list_id]
+        if (percent == 100) {
+            $(this).find('.col-document').append(`
+            <a class="badge badge-success add_document" href="javascript:void(0)" data-list_id="${list_id}">Upload Completion Certificate</a>
+            `);
+        }
+    });
+
+});
+
 function upload_file(element) {
 
     var doc = element.files[0];
@@ -282,3 +296,49 @@ $('.do_list_notify').on('click', function () {
         }
     });
 });
+
+$(document).on('click', '.add_document', function () {
+    let lid = $(this).data('list_id');
+    Swal.fire({
+        title: 'Upload PDF',
+        input: 'file',
+        inputAttributes: {
+            accept: 'application/pdf',
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Upload',
+        showLoaderOnConfirm: true,
+        didOpen: function() {
+            $('.swal2-file').addClass('form-control');
+        },
+        preConfirm: function (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('project_id', pid);
+            formData.append('list_id', lid);
+
+            $.ajax({
+                url: base_url + 'Project/upload_list_completion_certificate',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Your PDF has been uploaded.',
+                        icon: 'success'
+                    });
+                },
+                error: function (error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'There was an error uploading your PDF: ' + error.responseText,
+                        icon: 'error'
+                    });
+                }
+            });
+        }
+    });
+});
+

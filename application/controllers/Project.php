@@ -1,6 +1,11 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+require_once(APPPATH . 'libraries/tcpdf/tcpdf.php');
+require_once(APPPATH . 'libraries/fpdi/src/autoload.php');
+
+use setasign\Fpdi\Tcpdf\Fpdi;
+
 class Project extends CI_Controller
 {
 
@@ -400,11 +405,90 @@ class Project extends CI_Controller
 
 	public function update_list()
 	{
-		echo json_encode(['status' => $this->Commons_model->update([
-			'active_bit' => $this->input->post('list_id') == 1 ? 0 : 1
-		], [
-			'list_id' => $this->input->post('list_id'),
-			'project_id' => $this->input->post('project_id')
-		], 'tbl_project_records')]);
+		echo json_encode([
+			'status' => $this->Commons_model->update([
+				'active_bit' => $this->input->post('status') == 1 ? 0 : 1
+			], [
+				'list_id' => $this->input->post('list_id'),
+				'project_id' => $this->input->post('project_id')
+			], 'tbl_project_records'),
+			'set' => $this->input->post('status') == 1 ? 0 : 1
+		]);
+	}
+
+	public function upload_list_completion_certificate()
+	{
+		if ($this->input->method() == 'post') {
+			$this->load->library('upload');
+			$this->upload->initialize([
+				'upload_path' => './Assets/docs/certificates/',
+				'allowed_types' => 'pdf',
+				'file_name' => 'P_' . $this->input->post('project_id') . '_L_' . $this->input->post('list_id') . '_' . date('dmy')
+			]);
+			if (!$this->upload->do_upload('file')) {
+				echo json_encode(['errors' => $this->upload->display_errors('', '')]);
+			} else {
+				$upload = $this->upload->data();
+				echo json_encode(['status' => $this->Commons_model->insert_with_id([
+					'project_id'    => $this->input->post('project_id'),
+					'list_id'       => $this->input->post('list_id'),
+					'file_name'     => $upload['file_name'],
+					'path'          => "./Assets/docs/certificates/"
+				], 'tbl_list_certificates')]);
+			}
+		} else {
+			http_response_code(405);
+			echo 'Invalid HTTP method.';
+		}
+	}
+
+	// generate project completion certificate by merging multiple files into one.
+	public function gpcc()
+	{
+		$certificates = $this->Commons_model->get_where_select_orderby(
+			'concat(path,"",file_name) as file',
+			[
+				'project_id' => $this->input->post('pid')
+			],
+			'tbl_list_certificates as certificate',
+			[
+				'order_key' => 'list_id',
+				'order' => 'ASC'
+			]
+		);
+
+		$pdf = new Fpdi();
+		$pdf->setPrintHeader(false);
+		$pdf->setPrintFooter(false);
+
+		foreach ($certificates as $file) {
+			if (file_exists($file->file)) {
+				$pageCount = $pdf->setSourceFile($file->file);
+				for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+					$tplIdx = $pdf->importPage($pageNo);
+					$pdf->AddPage();
+					$pdf->useTemplate($tplIdx, 0, 0, $pdf->getTemplateSize($tplIdx)['width'], $pdf->getTemplateSize($tplIdx)['height'], true);
+				}
+			} else {
+				echo "No it doesnot " . "." . $file->file;
+				exit;
+			}
+		}
+
+		$outputFile = FCPATH . 'Assets/docs/merged/merged_doc_p' . $this->input->post('pid') . '.pdf';
+		$pdf->Output($outputFile, 'F');
+
+		echo json_encode([
+			'status' => 'success',
+			'message' => 'PDF files merged successfully',
+		]);
+	}
+
+
+	public function get_list_certificates()
+	{
+		echo json_encode(['res' => $this->Commons_model->get_where('tbl_list_certificates', [
+			'project_id' => $this->input->post('pid')
+		])]);
 	}
 }

@@ -127,6 +127,7 @@
             if (res.status) {
                 const childCheckboxes = $(this).closest(".col-6").find(".child-check");
                 childCheckboxes.prop("checked", $(this).prop("checked"));
+                $(this).data('status',res.set);
             }
         });
         update_list.catch(error => {
