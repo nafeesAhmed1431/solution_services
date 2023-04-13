@@ -5802,7 +5802,8 @@ body {
 .disable-text-selection .list {
     background: #fff;
     border-radius: 20px;
-    padding: 120px 20px 40px;
+    /* padding: 120px 20px 40px; */
+    padding: 30px 20px 40px;
 }
 
 a.theme-button {

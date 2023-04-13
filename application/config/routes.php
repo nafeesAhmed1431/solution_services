@@ -73,7 +73,6 @@ $route['EditUser/(:num)']    = 'Admin/edit_user/$1';
 $route['UpdateUser']         = 'Admin/update_user';
 
 //List Routes
-$route['AddUsers']           = 'Admin/new_user';
 $route['EditUser/(:num)']    = 'Admin/edit_user/$1';
 $route['UpdateUser']         = 'Admin/update_user';
 
@@ -87,6 +86,8 @@ $route['MyProfile']             = 'Admin/my_info';
 $route['UpdateMember']          = 'Member/edit_profile';
 $route['changePassword']        = 'Auth/change_password';
 
+// mail
+$route['mail']        = 'Admin/mail';
 
 $route['SendProjectEmail/(:num)']      = 'Auth/new_project_email/$1';
 

@@ -10,6 +10,7 @@ class Admin extends CI_Controller
 		$this->load->model('Admin_model');
 		$this->load->model('Project_model');
 		$this->load->model('Commons_model');
+		$this->load->model('Auth_model');
 
 		if (!($this->session->userdata('logged_in') == True)) :
 			redirect(base_url());
@@ -49,8 +50,8 @@ class Admin extends CI_Controller
 	{
 		$data['pageHeading'] = 'Users';
 		$data['users'] = $this->Project_model->get_all_users();
-		// $this->load_view('Project/', 'users', $data);
-		$this->load_view('Admin/', 'users_view_v2', $data);
+		$this->load_view('Project/', 'users', $data);
+		// $this->load_view('Admin/', 'users_view_v2', $data);
 		// $this->load_view('Admin/', 'users_view_v3', $data);
 	}
 
@@ -189,6 +190,27 @@ class Admin extends CI_Controller
 			$data['user'] 		 =  $this->Admin_model->details('tbl_users', $this->input->post('id'));
 			$this->load_view('Project/', 'edit_user', $data);
 		endif;
+	}
+
+	public function myInfo()
+	{
+		echo json_encode([
+			'user' => $this->Commons_model->get_row_select(
+				[
+					'img',
+					'contact',
+					'email',
+					'full_name',
+					'gender',
+					'job_title',
+					'last_login'
+				],
+				'tbl_users',
+				[
+					'id' => $this->session->userdata('id')
+				]
+			)
+		]);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -345,14 +367,16 @@ class Admin extends CI_Controller
 	///////////////////////////////////////////// CHECKLISTS FUNCTIONS //////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public function checklist_details($id){
-		$data['pageHeading'] = $this->Commons_model->get_row_select('title', 'tbl_lists', ['id'=>$id])->title;
+	public function checklist_details($id)
+	{
+		$data['pageHeading'] = $this->Commons_model->get_row_select('title', 'tbl_lists', ['id' => $id])->title;
 		$data['lists'] = $this->Admin_model->get_checklists($id);
 		$data['list_id'] = $id;
 		$this->load_view('Project/', 'checklists', $data);
 	}
 
-	public function delete_checklistlist(){
+	public function delete_checklistlist()
+	{
 		echo json_encode([
 			'res' => $this->Commons_model->update(
 				['delete_bit' => 1],
@@ -422,11 +446,11 @@ class Admin extends CI_Controller
 	{
 		echo json_encode([
 			'data' => $this->Commons_model->get_where_select(
-				['id','title'],
-				['delete_bit' => 0,'enable_bit' => 1],
+				['id', 'title'],
+				['delete_bit' => 0, 'enable_bit' => 1],
 				'tbl_process'
 			),
-			'pid' => $this->Commons_model->get_row_select('process_id','tbl_checklists',['id' => $this->input->get('clid')])->process_id
+			'pid' => $this->Commons_model->get_row_select('process_id', 'tbl_checklists', ['id' => $this->input->get('clid')])->process_id
 		]);
 	}
 
@@ -506,6 +530,58 @@ class Admin extends CI_Controller
 			)
 		]);
 	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////PROCESS FUNCTIONS //////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////Email FUNCTIONS //////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public function mail()
+	{
+		$data['pageHeading'] = 'Mail';
+		$this->load_view('Admin/', 'mail', $data);
+	}
+
+	public function get_mail_settings()
+	{
+		echo json_encode([
+			'data' => $this->Commons_model->get_all('tbl_mail_settings')
+		]);
+	}
+
+	public function sendGmail()
+	{
+		$this->load->library('phpmailer_lib');
+		$this->phpmailer_lib->send_mail($this->input->get('to'), 'subject', $this->input->get('body'), null, null, null);
+	}
+
+	public function activate_mail()
+	{
+		echo json_encode([
+			'res' => $this->db->set('active', 'CASE WHEN id = ' . $this->db->escape($this->input->post('id')) . ' THEN 1 ELSE 0 END', FALSE)
+				->update('tbl_mail_settings')
+		]);
+	}
+
+	public function update_email()
+	{
+		echo json_encode([
+			'res' => $this->Commons_model->update([
+				'admin_email' => $this->input->post('email'),
+				'smtp_user' => $this->input->post('email'),
+				'smtp_password' => $this->input->post('password')
+			], [
+				'id' => $this->input->post('id')
+			], 'tbl_mail_settings')
+		]);
+	}
+
+
+
+
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////PROCESS FUNCTIONS //////////////////////////////////////////////

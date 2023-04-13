@@ -29,13 +29,14 @@
 
 
     <a class="navbar-logo" href="#">
-        <img src="<?php echo base_url('Assets/img/ss-logo.png')?>" alt="" width="200px">
+        <img src="<?php echo base_url('Assets/img/ss-logo.png') ?>" alt="" width="200px">
     </a>
 
     <div class="navbar-right">
         <div class="header-icons d-inline-block align-middle">
-            <?php // if ($this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) : ?>
-                <!-- <div class="position-relative d-none d-sm-inline-block">
+            <?php // if ($this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) : 
+            ?>
+            <!-- <div class="position-relative d-none d-sm-inline-block">
                     <button class="header-icon btn btn-empty" type="button" id="iconMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="simple-icon-grid"></i>
                     </button>
@@ -46,7 +47,8 @@
                         </a>
                     </div>
                 </div> -->
-            <?php // endif; ?>
+            <?php // endif; 
+            ?>
 
             <button class="header-icon btn btn-empty d-none d-sm-inline-block" type="button" id="fullScreenButton">
                 <i class="simple-icon-size-fullscreen"></i>
@@ -64,12 +66,14 @@
             </button>
 
             <div class="dropdown-menu dropdown-menu-right mt-3">
-                <?php if($this->session->userdata('role_id') == 1) {?>
-                    <?php print_r('');?>
-                <?php }else{?>
-                    <a class="dropdown-item" href="<?=base_url('MyProfile')?>">Perfil</a>
-                <?php }?>
-                <a class="dropdown-item" href="<?=base_url('changePassword')?>">Cambia contraseña</a>
+                <?php if ($this->session->userdata('role_id') == 1) { ?>
+                    <?php print_r(''); ?>
+                <?php } else { ?>
+                    <a class="dropdown-item view_profile" href="javascript:void(0)">Perfil</a>
+                <?php } ?>
+                <a class="dropdown-item view_profile" href="javascript:void(0)">Perfil</a>
+                <a class="dropdown-item" href="<?= base_url('changePassword') ?>">Cambia contraseña</a>
+                <a class="dropdown-item" href="<?= base_url('mail') ?>">Mail</a>
                 <a class="dropdown-item" href="<?= base_url('Auth/logout') ?>">Cerrar sesión</a>
             </div>
         </div>
