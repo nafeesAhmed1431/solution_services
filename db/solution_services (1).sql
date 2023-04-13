@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 10, 2023 at 10:52 AM
+-- Generation Time: Apr 13, 2023 at 11:38 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -306,6 +306,59 @@ INSERT INTO `tbl_lists` (`id`, `title`, `mk_status`, `index`, `created_at`, `ena
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_list_certificates`
+--
+
+CREATE TABLE `tbl_list_certificates` (
+  `id` int(11) NOT NULL,
+  `project_id` int(11) DEFAULT NULL,
+  `list_id` int(11) DEFAULT NULL,
+  `file_name` varchar(1000) DEFAULT NULL,
+  `path` varchar(1000) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_list_certificates`
+--
+
+INSERT INTO `tbl_list_certificates` (`id`, `project_id`, `list_id`, `file_name`, `path`, `status`) VALUES
+(4, 243, 1, 'P_243_L_1_110423.pdf', './Assets/docs/certificates/', 1),
+(5, 243, 6, 'P_243_L_6_110423.pdf', './Assets/docs/certificates/', 1),
+(6, 243, 8, 'P_243_L_8_110423.pdf', './Assets/docs/certificates/', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_mail_settings`
+--
+
+CREATE TABLE `tbl_mail_settings` (
+  `id` int(11) NOT NULL,
+  `setting_name` varchar(1000) NOT NULL,
+  `admin_email` varchar(1000) NOT NULL,
+  `protocol` varchar(1000) NOT NULL,
+  `smtp_host` varchar(1000) NOT NULL,
+  `smtp_user` varchar(1000) NOT NULL,
+  `smtp_password` varchar(1000) NOT NULL,
+  `smtp_port` int(11) NOT NULL,
+  `smtp_crypto` varchar(1000) NOT NULL,
+  `mailpath` varchar(1000) NOT NULL,
+  `active` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_mail_settings`
+--
+
+INSERT INTO `tbl_mail_settings` (`id`, `setting_name`, `admin_email`, `protocol`, `smtp_host`, `smtp_user`, `smtp_password`, `smtp_port`, `smtp_crypto`, `mailpath`, `active`) VALUES
+(1, 'Info DTSS', 'notif@dtss.miapprd.com', 'smtp', 'mail.dtss.miapprd.com', 'notif@dtss.miapprd.com', 'So7HmRJTEgwskszZ', 465, 'ssl', '/usr/sbin/sendmail', 0),
+(3, 'G Mail', '', 'smtp', 'smtp.gmail.com', '', '', 465, 'ssl', '/usr/sbin/sendmail', 1),
+(4, 'Yahoo', 'asad9271@yahoo.com', 'smtp', 'smtp.yahoo.com', 'asad9271@yahoo.com', 'haincheckhain', 465, 'ssl', '/usr/sbin/sendmail', 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_modules`
 --
 
@@ -469,22 +522,22 @@ CREATE TABLE `tbl_project_records` (
 
 INSERT INTO `tbl_project_records` (`id`, `project_id`, `list_id`, `checklist_id`, `status`, `date_1`, `date_2`, `comments`, `active_bit`, `created_at`, `delete_bit`) VALUES
 (13875, 243, 1, 1, 1, '2023-04-07', '2023-04-08', 'bsamndsa', 1, '2023-04-06', 0),
-(13876, 243, 1, 2, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13877, 243, 1, 3, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13878, 243, 1, 64, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13879, 243, 1, 65, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13880, 243, 1, 66, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13881, 243, 1, 67, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13882, 243, 1, 68, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13883, 243, 1, 69, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13884, 243, 1, 70, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13885, 243, 1, 71, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13886, 243, 1, 72, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13887, 243, 1, 73, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13888, 243, 1, 74, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13889, 243, 1, 75, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13890, 243, 1, 76, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13891, 243, 1, 77, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
+(13876, 243, 1, 2, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13877, 243, 1, 3, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13878, 243, 1, 64, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13879, 243, 1, 65, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13880, 243, 1, 66, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13881, 243, 1, 67, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13882, 243, 1, 68, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13883, 243, 1, 69, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13884, 243, 1, 70, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13885, 243, 1, 71, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13886, 243, 1, 72, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13887, 243, 1, 73, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13888, 243, 1, 74, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13889, 243, 1, 75, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13890, 243, 1, 76, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13891, 243, 1, 77, 1, NULL, NULL, NULL, 1, '2023-04-06', 0),
 (13892, 243, 2, 4, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13893, 243, 2, 5, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13894, 243, 2, 6, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
@@ -494,14 +547,14 @@ INSERT INTO `tbl_project_records` (`id`, `project_id`, `list_id`, `checklist_id`
 (13898, 243, 2, 42, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13899, 243, 2, 52, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13900, 243, 2, 78, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
-(13901, 243, 2, 79, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
+(13901, 243, 2, 79, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13902, 243, 2, 80, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13903, 243, 2, 81, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13904, 243, 2, 82, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
-(13905, 243, 5, 16, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
+(13905, 243, 5, 16, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13906, 243, 5, 17, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13907, 243, 5, 18, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
-(13908, 243, 6, 20, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
+(13908, 243, 6, 20, 1, NULL, NULL, NULL, 1, '2023-04-06', 0),
 (13909, 243, 7, 21, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13910, 243, 7, 22, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13911, 243, 7, 23, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
@@ -510,18 +563,18 @@ INSERT INTO `tbl_project_records` (`id`, `project_id`, `list_id`, `checklist_id`
 (13914, 243, 7, 26, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13915, 243, 7, 27, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13916, 243, 7, 28, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
-(13917, 243, 7, 29, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13918, 243, 7, 30, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13919, 243, 7, 31, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13920, 243, 7, 32, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13921, 243, 7, 33, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13922, 243, 7, 34, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13923, 243, 7, 35, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13924, 243, 7, 36, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13925, 243, 7, 37, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13926, 243, 7, 38, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13927, 243, 7, 39, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13928, 243, 8, 45, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
+(13917, 243, 7, 29, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13918, 243, 7, 30, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13919, 243, 7, 31, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13920, 243, 7, 32, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13921, 243, 7, 33, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13922, 243, 7, 34, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13923, 243, 7, 35, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13924, 243, 7, 36, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13925, 243, 7, 37, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13926, 243, 7, 38, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13927, 243, 7, 39, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13928, 243, 8, 45, 1, NULL, NULL, NULL, 1, '2023-04-06', 0),
 (13929, 243, 9, 46, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13930, 243, 10, 47, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13931, 243, 10, 48, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
@@ -589,8 +642,8 @@ INSERT INTO `tbl_project_records` (`id`, `project_id`, `list_id`, `checklist_id`
 (13993, 243, 21, 142, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13994, 243, 21, 143, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
 (13995, 243, 21, 144, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
-(13996, 243, 31, 153, 0, NULL, NULL, NULL, 1, '2023-04-06', 0),
-(13997, 243, 31, 154, 0, NULL, NULL, NULL, 1, '2023-04-06', 0);
+(13996, 243, 31, 153, 0, NULL, NULL, NULL, 0, '2023-04-06', 0),
+(13997, 243, 31, 154, 0, NULL, NULL, NULL, 0, '2023-04-06', 0);
 
 -- --------------------------------------------------------
 
@@ -612,7 +665,10 @@ CREATE TABLE `tbl_records` (
 --
 
 INSERT INTO `tbl_records` (`id`, `project_id`, `list_id`, `checklist_id`, `document_name`, `file_name`) VALUES
-(161, 243, 1, 1, NULL, '1680780050Screenshot_(1).png');
+(161, 243, 1, 1, NULL, '1680780050Screenshot_(1).png'),
+(162, 243, 6, 20, NULL, '1681119920Screenshot_(1).png'),
+(163, 243, 1, 77, NULL, '1681122300Screenshot_2023-03-01_133826.png'),
+(164, 243, 8, 45, NULL, '1681216274my_document.pdf');
 
 -- --------------------------------------------------------
 
@@ -654,15 +710,16 @@ CREATE TABLE `tbl_settings` (
   `smtp_password` varchar(255) DEFAULT NULL,
   `smtp_port` varchar(55) DEFAULT NULL,
   `smtp_crypto` enum('tls','ssl') DEFAULT 'ssl',
-  `mailpath` varchar(55) DEFAULT NULL
+  `mailpath` varchar(55) DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_settings`
 --
 
-INSERT INTO `tbl_settings` (`id`, `admin_email`, `protocol`, `smtp_host`, `smtp_user`, `smtp_password`, `smtp_port`, `smtp_crypto`, `mailpath`) VALUES
-(1, 'info@dtss.miapprd.com', 'smtp', 'mail.dtss.miapprd.com', 'notif@dtss.miapprd.com', 'So7HmRJTEgwskszZ', '465', 'ssl', '/usr/sbin/sendmail');
+INSERT INTO `tbl_settings` (`id`, `admin_email`, `protocol`, `smtp_host`, `smtp_user`, `smtp_password`, `smtp_port`, `smtp_crypto`, `mailpath`, `active`) VALUES
+(1, 'info@dtss.miapprd.com', 'smtp', 'mail.dtss.miapprd.com', 'notif@dtss.miapprd.com', 'So7HmRJTEgwskszZ', '465', 'ssl', '/usr/sbin/sendmail', 1);
 
 -- --------------------------------------------------------
 
@@ -700,14 +757,15 @@ CREATE TABLE `tbl_users` (
 --
 
 INSERT INTO `tbl_users` (`id`, `full_name`, `user_name`, `password`, `cnic`, `email`, `gender`, `img`, `qr_img`, `bg_img`, `address`, `job_title`, `contact`, `joining_date`, `badge`, `created_at`, `modified_at`, `last_login`, `role_id`, `user_theme`, `enable_bit`, `delete_bit`) VALUES
-(1, 'Super Admin', 'super', 'hain123', NULL, 'info@masonicdues.com', 'Male', 'profile.jpg', 'member_awais.png', '1662407635big-buck-bunny-poster.jpg', 'Gujranwala', 'Administrator', '030000000', '2018-09-10 00:00:00', 1, '2018-09-10 00:00:00', '2023-04-10 05:49:31', '2023-04-10 07:49:31', 1, 1, b'1', b'0'),
-(2, 'Admin', 'admin', NULL, '0000000000', 'nafees1431@gmail.com', 'Male', '1664367585dtss.JPG', 'member_awais.png', '1662229586genoise-thumb.jpg', 'Punta Cana', 'Admin', '47328903243298', '2022-08-20 00:18:10', 1, '2022-11-14 09:51:09', '2022-11-14 09:51:09', '2022-11-01 10:47:36', 2, 1, b'1', b'0'),
-(3, 'Salman Ahmed', 'member', 'hain123', NULL, 'salman1431@gmail.com', 'Male', 'profile2.jpg', 'member_awais.png', NULL, 'Gujranwala', 'Member', '0345000000', NULL, 2, '2022-08-20 00:18:10', '2022-11-01 09:51:07', '2022-09-14 13:04:07', 2, 0, b'0', b'1'),
+(1, 'Super Admin', 'super', 'hain123', NULL, 'info@masonicdues.com', 'Male', 'profile.jpg', 'member_awais.png', '1662407635big-buck-bunny-poster.jpg', 'Gujranwala', 'Administrator', '030000000', '2018-09-10 00:00:00', 1, '2018-09-10 00:00:00', '2023-04-13 08:02:14', '2023-04-13 10:02:14', 1, 1, b'1', b'0'),
+(2, 'Admin', 'admin', 'hain123', '0000000000', 'nafees1431@gmail.com', 'Male', '1664367585dtss.JPG', 'member_awais.png', '1662229586genoise-thumb.jpg', 'Punta Cana', 'Admin', '47328903243298', '2022-08-20 00:18:10', 1, '2022-11-14 09:51:09', '2023-04-13 07:47:48', '2023-04-13 09:47:48', 2, 1, b'1', b'0'),
+(3, 'Salman Ahmed', 'member', 'hain123', NULL, 'salman1431@gmail.com', 'Male', 'profile2.jpg', 'member_awais.png', NULL, 'Gujranwala', 'Member', '0345000000', NULL, 2, '2022-08-20 00:18:10', '2023-04-13 07:05:08', '2022-09-14 13:04:07', 2, 0, b'0', b'0'),
 (40, 'CHEKC', 'check', 'hain123', '46328754367', 'check@gmail.com', 'Male', NULL, NULL, NULL, 'misc address', NULL, '436278534', NULL, NULL, '2022-10-27 07:23:09', '2022-10-27 10:26:51', '2022-10-27 10:26:11', 2, 0, b'0', b'0'),
-(41, 'Eliezer', 'eliezer', NULL, '473854378', 'e@d.com', 'Male', NULL, NULL, NULL, 'sdf', NULL, '58749654', NULL, NULL, '2022-11-03 10:22:10', '2022-11-03 10:22:20', '2022-11-01 10:43:20', 2, 0, b'1', b'0'),
+(41, 'Eliezer', 'eliezer', NULL, '473854378', 'e@d.com', 'Male', NULL, NULL, NULL, 'sdf', NULL, '58749654', NULL, NULL, '2022-11-03 10:22:10', '2023-04-13 07:03:52', '2022-11-01 10:43:20', 2, 0, b'0', b'0'),
 (43, 'Katherine', 'katherine', 'solutionservices', '0000000000', 'k@dtss.com', 'Female', NULL, NULL, NULL, 'Puntacana', NULL, '00000000', NULL, NULL, '2022-11-11 09:52:54', '2023-02-09 18:35:19', '2023-02-09 18:35:19', 1, 1, b'1', b'0'),
-(44, 'Ramon', 'ramonfernandez', 'solutionservices', '0000000000', 'rfernandez@dtss.com.do', 'Male', NULL, NULL, NULL, 'Puntacana', NULL, '0000000000', NULL, NULL, '2022-11-14 09:50:45', '2022-11-14 09:50:45', NULL, 2, 1, b'1', b'0'),
-(45, 'check', 'checkMain', 'hain123', '437483627', 'muazkhokhar9271@gmail.com', 'Male', NULL, NULL, NULL, 'checkaddress', NULL, '7384903', NULL, NULL, '2022-12-05 13:04:37', '2023-03-27 11:13:40', '2022-12-05 13:04:53', 2, 0, b'0', b'1');
+(44, 'Ramon', 'ramonfernandez', 'solutionservices', '0000000000', 'rfernandez@dtss.com.do', 'Male', NULL, NULL, NULL, 'Puntacana', NULL, '0000000000', NULL, NULL, '2022-11-14 09:50:45', '2023-04-13 07:04:01', NULL, 2, 1, b'0', b'0'),
+(45, 'check', 'checkMain', 'hain123', '437483627', 'muazkhokhar9271@gmail.com', 'Male', NULL, NULL, NULL, 'checkaddress', NULL, '7384903', NULL, NULL, '2022-12-05 13:04:37', '2023-04-13 07:05:12', '2022-12-05 13:04:53', 2, 0, b'0', b'0'),
+(46, 'slman ahmed', 'salman', 'hain123', '5635436', 'salman@gmail.com', 'Male', NULL, NULL, NULL, 'dhsjak', NULL, '5434', NULL, NULL, '2023-04-13 09:09:07', '2023-04-13 07:14:42', '2023-04-13 09:14:42', 2, 0, b'1', b'0');
 
 --
 -- Indexes for dumped tables
@@ -735,6 +793,18 @@ ALTER TABLE `tbl_email_logs`
 -- Indexes for table `tbl_lists`
 --
 ALTER TABLE `tbl_lists`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_list_certificates`
+--
+ALTER TABLE `tbl_list_certificates`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_mail_settings`
+--
+ALTER TABLE `tbl_mail_settings`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -820,6 +890,18 @@ ALTER TABLE `tbl_lists`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
+-- AUTO_INCREMENT for table `tbl_list_certificates`
+--
+ALTER TABLE `tbl_list_certificates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `tbl_mail_settings`
+--
+ALTER TABLE `tbl_mail_settings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `tbl_modules`
 --
 ALTER TABLE `tbl_modules`
@@ -847,13 +929,13 @@ ALTER TABLE `tbl_project_records`
 -- AUTO_INCREMENT for table `tbl_records`
 --
 ALTER TABLE `tbl_records`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
