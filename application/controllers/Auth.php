@@ -6,8 +6,10 @@ class Auth extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->library('form_validation');
-
+		$this->load->library([
+			'form_validation',
+			'phpmailer_lib'
+		]);
 		$this->load->model([
 			'Auth_model',
 			'Admin_model',
@@ -126,16 +128,8 @@ class Auth extends CI_Controller
 		$html .= "<p><b>Documento: </b>" . $clid[0]->title . "</p>";
 		$html .= "Favor remitir dicho documento a la mayor brevedad posible.";
 
-		$em = $this->send_mail(
-			$pid[0]->contact_email,
-			"Documento Pendiente",
-			$html,
-			"info@dtss.miapprd.com",
-			"Solution Services",
-			null,
-			json_decode($pid[0]->additional_emails)
-		);
-		echo ($em == true) ? json_encode(array('status' => 200)) : false;
+		$em = $this->phpmailer_lib->send_mail($pid[0]->contact_email, "Documento Pendiente", $html, null, json_decode($pid[0]->additional_emails), $bcc = null);
+		echo $em ? json_encode(array('status' => 200)) : false;
 	}
 
 	public function new_project_email($id)
@@ -149,7 +143,7 @@ class Auth extends CI_Controller
 		$html .= "<p>-------------------O-------------------</p>";
 		$html .= "<p>Escanee el QR que se muestra en la imagen:</p>";
 		$html .= "<img src=" . base_url('qr_code/') . $pro[0]->qr_img . ">";
-		$em = $this->send_mail($pro[0]->contact_email, $Subject, $html, "info@solutionServices.com", "Solution Services");
+		$em = $this->phpmailer_lib->send_mail($pro[0]->contact_email, $Subject, $html, null, null, null);
 		return  $em ? redirect(base_url('Projects')) : redirect(base_url('Dashboard'));
 	}
 
@@ -159,16 +153,16 @@ class Auth extends CI_Controller
 			'id' => $this->input->get('pid')
 		]);
 
-		$em = $this->send_mail(
+		$em = $this->phpmailer_lib->send_mail(
 			$project->contact_email,
 			"Documento Pendiente",
 			$this->email_pending_list_template($project, $this->Project_model->get_notification_list_items($this->input->get())),
-			"info@dtss.miapprd.com",
-			"Solution Services",
 			null,
-			json_decode($project->additional_emails)
+			json_decode($project->additional_emails),
+			null
 		);
-		echo ($em == true) ? json_encode(array('status' => 200)) : false;
+
+		echo $em ? json_encode(array('status' => 200)) : false;
 	}
 
 	public function email_pending_list_template($project, $data)
@@ -193,10 +187,10 @@ class Auth extends CI_Controller
 											Following Documents of Project are Pending. Kindly make it sure to Submit ASAP.
 										</p>
 										<h3 style="color:#303030; font-size:18px; line-height: 1.6; font-weight:500;">Pending Documents</h3>';
-							foreach ($data as $key => $list) {
-								$temp .= '<p style="background-color:#f1f1f1; padding: 8px 15px; border-radius: 50px; display: inline-block; margin-bottom:20px; font-size: 14px;  line-height: 1.4; font-family: Courier New, Courier, monospace; margin-top:0">' . ($key + 1) . ' : ' . $list->checklist_title . '</p><br>';
-							}
-						  $temp .= '</td>
+		foreach ($data as $key => $list) {
+			$temp .= '<p style="background-color:#f1f1f1; padding: 8px 15px; border-radius: 50px; display: inline-block; margin-bottom:20px; font-size: 14px;  line-height: 1.4; font-family: Courier New, Courier, monospace; margin-top:0">' . ($key + 1) . ' : ' . $list->checklist_title . '</p><br>';
+		}
+		$temp .= '</td>
 								</tr>
 								<tr>
 									<td colspan="2">
@@ -208,7 +202,7 @@ class Auth extends CI_Controller
 															<tbody>
 																<tr>
 																	<td align="center" valign="middle" style="padding:13px;">
-																		<a href="'.base_url('State/'.$project->id).'" title="View" target="_blank" style="font-size: 14px; line-height: 1.5; font-weight: 700; letter-spacing: 1px; padding: 15px 40px; text-align:center; text-decoration:none; color:#FFFFFF; border-radius: 50px; background-color:#145388;">View List</a>
+																		<a href="' . base_url('State/' . $project->id) . '" title="View" target="_blank" style="font-size: 14px; line-height: 1.5; font-weight: 700; letter-spacing: 1px; padding: 15px 40px; text-align:center; text-decoration:none; color:#FFFFFF; border-radius: 50px; background-color:#145388;">View List</a>
 																	</td>
 																</tr>
 															</tbody>
@@ -235,59 +229,5 @@ class Auth extends CI_Controller
 					</center>
 				</div>';
 		return $temp;
-	}
-
-	public function send_mail(
-		$to,
-		$subject,
-		$body,
-		$from = NULL,
-		$from_name = NULL,
-		$attachment = NULL,
-		$cc = [],
-		$bcc = []
-	) {
-		$this->load->library('phpmailer_lib');
-		$mail = $this->phpmailer_lib->load();
-		$set = $this->Auth_model->details(1, 'tbl_settings')[0];
-		$mail->CharSet = 'UTF-8';
-		if ($set->protocol == 'smtp') {
-			$mail->isSMTP();
-			$mail->Host = $set->smtp_host;
-			$mail->SMTPAuth = true;
-			$mail->Username = $set->smtp_user;
-			$mail->Password = $set->smtp_password;
-			$mail->SMTPSecure = $set->smtp_crypto ?? false;
-			$mail->Port = $set->smtp_port;
-		} else {
-			$mail->isMail();
-		}
-		$from = $from ?? $set->default_email;
-		$from_name = $from_name ?? $set->site_name;
-		$mail->setFrom($from, $from_name);
-		$mail->addReplyTo($from, $from_name);
-		$mail->addAddress($to);
-
-		foreach ($cc as $email) {
-			$mail->addCC($email);
-		}
-		foreach ($bcc as $email) {
-			$mail->addBCC($email);
-		}
-
-		$mail->Subject = $subject;
-		$mail->isHTML(true);
-		$mail->Body = $body;
-		if ($attachment) {
-			if (is_array($attachment)) {
-				foreach ($attachment as $attach) {
-					$mail->addAttachment($attach);
-				}
-			} else {
-				$mail->addAttachment($attachment);
-			}
-		}
-
-		return $mail->send();
 	}
 }

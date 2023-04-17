@@ -27,6 +27,7 @@
         left: -10px;
     }
 </style>
+<script src="<?=base_url('Assets/js/vendor/jquery-3.3.1.min.js')?>"></script>
 <div class="container-fluid disable-text-selection">
     <div class="col-12 list" data-check-all="checkAll">
         <?php if ($load_data == 1) : ?>
@@ -148,8 +149,8 @@
         <?php endif; ?>
     </div>
 </div>
-<script src="http://localhost/solution_services/Assets/js/jquery-3.3.1.min.js"></script>
 <script>
+
     var base_url = '<?= base_url() ?>';
     $('.collapsed').click(function() {
         $(this).find('.arrow').toggleClass('simple-icon-arrow-down simple-icon-arrow-up');

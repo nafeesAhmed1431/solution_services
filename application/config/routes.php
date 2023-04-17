@@ -54,7 +54,7 @@ $route['Dashboard']             = 'Admin/index';
 
 // project routes
 $route['AddProject']            = 'Project/new_project';
-$route['Projects']              = 'Project/all_projects';
+$route['Project']              = 'Project/all_projects';
 $route['Completed']             = 'Project/completed_projects';
 $route['Archived']              = 'Project/archived_projects';
 $route['Pending']               = 'Project/pending_projects';
@@ -87,7 +87,7 @@ $route['UpdateMember']          = 'Member/edit_profile';
 $route['changePassword']        = 'Auth/change_password';
 
 // mail
-$route['mail']        = 'Admin/mail';
+$route['settings']        = 'Admin/settings';
 
 $route['SendProjectEmail/(:num)']      = 'Auth/new_project_email/$1';
 

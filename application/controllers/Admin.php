@@ -539,10 +539,10 @@ class Admin extends CI_Controller
 	/////////////////////////////////////////////Email FUNCTIONS //////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public function mail()
+	public function settings()
 	{
-		$data['pageHeading'] = 'Mail';
-		$this->load_view('Admin/', 'mail', $data);
+		$data['pageHeading'] = 'Settings';
+		$this->load_view('Admin/', 'settings', $data);
 	}
 
 	public function get_mail_settings()
@@ -572,7 +572,10 @@ class Admin extends CI_Controller
 			'res' => $this->Commons_model->update([
 				'admin_email' => $this->input->post('email'),
 				'smtp_user' => $this->input->post('email'),
-				'smtp_password' => $this->input->post('password')
+				'smtp_password' => $this->input->post('password'),
+				'smtp_host' => $this->input->post('smtp_host'),
+				'smtp_crypto' => $this->input->post('protocol'),
+				'smtp_port' => $this->input->post('smtp_port')
 			], [
 				'id' => $this->input->post('id')
 			], 'tbl_mail_settings')

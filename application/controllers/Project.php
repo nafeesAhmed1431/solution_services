@@ -1,11 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-require_once(APPPATH . 'libraries/tcpdf/tcpdf.php');
-require_once(APPPATH . 'libraries/fpdi/src/autoload.php');
-
-use setasign\Fpdi\Tcpdf\Fpdi;
-
 class Project extends CI_Controller
 {
 
@@ -109,6 +104,10 @@ class Project extends CI_Controller
 		$data['checklists']  = $this->Project_model->get_project_checklists($id);
 		$data['documents']  = $this->Project_model->get_tbl_records($id);
 		$data['lists']       = $this->Project_model->get_project_lists();
+		$data['processes']   = $this->Commons_model->get_where('tbl_process',[
+			'enable_bit' => 1,
+			'delete_bit' => 0,
+		]);
 		$data['project_id'] = $id;
 
 		$data['pageHeading'] = 'Edit Checklists';
@@ -379,27 +378,15 @@ class Project extends CI_Controller
 
 	public function generate_project_pdf($id = null)
 	{
-
 		$this->load->library('pdf');
-
 		$project = $this->Commons_model->get_row('tbl_projects', ['id' => $id]);
-
-		// Set document information
 		$this->pdf->SetCreator('Solution Services');
 		$this->pdf->SetAuthor('info@solutionServices.com');
 		$this->pdf->SetTitle($project->project_name);
 		$this->pdf->SetSubject('Project Completion ' . $project->project_name);
-
-		// Add a page
 		$this->pdf->AddPage();
-
-		// Set some content
 		$content = '';
-
-		// Write the content to the PDF document
 		$this->pdf->writeHTML($content, true, false, true, false, '');
-
-		// Output the PDF document
 		$this->pdf->Output('my_document.pdf', 'I');
 	}
 
@@ -443,8 +430,11 @@ class Project extends CI_Controller
 	}
 
 	// generate project completion certificate by merging multiple files into one.
+
 	public function gpcc()
 	{
+		$this->load->library('my_pdf');
+
 		$certificates = $this->Commons_model->get_where_select_orderby(
 			'concat(path,"",file_name) as file',
 			[
@@ -457,33 +447,10 @@ class Project extends CI_Controller
 			]
 		);
 
-		$pdf = new Fpdi();
-		$pdf->setPrintHeader(false);
-		$pdf->setPrintFooter(false);
-
-		foreach ($certificates as $file) {
-			if (file_exists($file->file)) {
-				$pageCount = $pdf->setSourceFile($file->file);
-				for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
-					$tplIdx = $pdf->importPage($pageNo);
-					$pdf->AddPage();
-					$pdf->useTemplate($tplIdx, 0, 0, $pdf->getTemplateSize($tplIdx)['width'], $pdf->getTemplateSize($tplIdx)['height'], true);
-				}
-			} else {
-				echo "No it doesnot " . "." . $file->file;
-				exit;
-			}
-		}
-
-		$outputFile = FCPATH . 'Assets/docs/merged/merged_doc_p' . $this->input->post('pid') . '.pdf';
-		$pdf->Output($outputFile, 'F');
-
 		echo json_encode([
-			'status' => 'success',
-			'message' => 'PDF files merged successfully',
+			'status' => $this->my_pdf->merge_pdf($certificates,$this->input->post('pid'))
 		]);
 	}
-
 
 	public function get_list_certificates()
 	{

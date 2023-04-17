@@ -62,4 +62,57 @@ class PHPMailer_Lib
 
         return $mail->send();
     }
+
+    public function send_mail2(
+		$to,
+		$subject,
+		$body,
+		$from = NULL,
+		$from_name = NULL,
+		$attachment = NULL,
+		$cc = [],
+		$bcc = []
+	) {
+		$set = $this->CI->Commons_model->get_row('tbl_mail_settings', ['active' => 1]);
+		$mail = $this->load();
+		$mail->CharSet = 'UTF-8';
+		if ($set->protocol == 'smtp') {
+			$mail->isSMTP();
+			$mail->Host = $set->smtp_host;
+			$mail->SMTPAuth = true;
+			$mail->Username = $set->smtp_user;
+			$mail->Password = $set->smtp_password;
+			$mail->SMTPSecure = $set->smtp_crypto ?? false;
+			$mail->Port = $set->smtp_port;
+		} else {
+			$mail->isMail();
+		}
+		$from = $from ?? $set->default_email;
+		$from_name = $from_name ?? $set->site_name;
+		$mail->setFrom($from, $from_name);
+		$mail->addReplyTo($from, $from_name);
+		$mail->addAddress($to);
+
+		foreach ($cc as $email) {
+			$mail->addCC($email);
+		}
+		foreach ($bcc as $email) {
+			$mail->addBCC($email);
+		}
+
+		$mail->Subject = $subject;
+		$mail->isHTML(true);
+		$mail->Body = $body;
+		if ($attachment) {
+			if (is_array($attachment)) {
+				foreach ($attachment as $attach) {
+					$mail->addAttachment($attach);
+				}
+			} else {
+				$mail->addAttachment($attachment);
+			}
+		}
+
+		return $mail->send();
+	}
 }

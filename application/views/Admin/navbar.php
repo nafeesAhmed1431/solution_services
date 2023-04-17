@@ -1,3 +1,12 @@
+
+<style>
+    .dropdown-menu-right{
+        font-size: 15px;
+    }
+    .icon_dropdown{
+        font-size: 20px;
+    }
+</style>
 <nav class="navbar fixed-top">
 
     <div class="d-flex align-items-center navbar-left">
@@ -69,12 +78,12 @@
                 <?php if ($this->session->userdata('role_id') == 1) { ?>
                     <?php print_r(''); ?>
                 <?php } else { ?>
-                    <a class="dropdown-item view_profile" href="javascript:void(0)">Perfil</a>
+                    <a class="dropdown-item view_profile" href="javascript:void(0)"> <i class="icon_dropdown iconsminds-profile"></i> Perfil</a>
                 <?php } ?>
-                <a class="dropdown-item view_profile" href="javascript:void(0)">Perfil</a>
-                <a class="dropdown-item" href="<?= base_url('changePassword') ?>">Cambia contraseña</a>
-                <a class="dropdown-item" href="<?= base_url('mail') ?>">Mail</a>
-                <a class="dropdown-item" href="<?= base_url('Auth/logout') ?>">Cerrar sesión</a>
+                <a class="dropdown-item view_profile" href="javascript:void(0)"><i class="icon_dropdown iconsminds-profile"></i> Perfil</a>
+                <a class="dropdown-item" href="<?= base_url('changePassword') ?>"><i class="icon_dropdown iconsminds-key"></i> Cambia contraseña</a>
+                <a class="dropdown-item" href="<?= base_url('settings') ?>"><i class="icon_dropdown simple-icon-settings"></i> Settings</a>
+                <a class="dropdown-item" href="<?= base_url('Auth/logout') ?>"><i class="icon_dropdown simple-icon-login"></i> Cerrar sesión</a>
             </div>
         </div>
 

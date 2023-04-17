@@ -1,5 +1,6 @@
+var win_loc = $('#callBackLoc').val();
+
 $(document).ready(function () {
-    var win_loc = $('#callBackLoc').val();
     $('#allProjectsTable').DataTable({
         suppressWarnings: true,
     });
