@@ -4,43 +4,38 @@
         height: 20px;
     }
 </style>
-
-<pre>
-    <?= print_r($processes) ?>
-</pre>
-
 <div class="container-fluid disable-text-selection">
     <div class="col-12">
         <section class="content-header mb-5">
-            <h1 class="ml-0 text-large"><?= $pageHeading; ?></h1>
+            <h1 class="ml-0 text-large">
+                <?= $pageHeading; ?>
+            </h1>
         </section>
         <section class="container">
             <div class="row">
                 <?php
                 $lcl = array();
                 foreach ($lists as $list) {
-                    $lcl[$list->id] = array('total' => 0, 'active' => 0); ?>
+                    $lcl[$list->id] = array('total' => 0, 'active' => 0);
+                ?>
                     <div class="col-6 mb-3">
                         <div class="form-group">
                             <input type="checkbox" class="list_check parent-check" data-list_id="<?= $list->id ?>" data-status="0">
                             <label class="mt-0" style="font-size: 26px;"><?= $list->title ?></label>
                         </div>
-                        <?php foreach ($processes as $process) : ?>
-                            1
-                            <?php foreach ($checklists as $checklist) : ?>
-                                <?php if ($list->id == $checklist->list_id) {
-                                    $lcl[$list->id]['total']++;
-                                    if ($checklist->active_bit == 1) {
-                                        $lcl[$list->id]['active']++;
-                                    }
-                                } ?>
-                                <?php if ($list->id == $checklist->list_id) : ?>
-                                    <div class="d-flex">
-                                        <input class="mb-3 active_bit child-check" type="checkbox" data-p_id="<?= $checklist->project_id ?>" data-l_id="<?= $checklist->list_id ?>" data-cl_id="<?= $checklist->checklist_id ?>" onchange="active_bit(this)" value="<?= ($checklist->active_bit == 1) ?  '1' : '0' ?>" <?= ($checklist->active_bit == 1) ? 'checked' : '' ?>>
-                                        <p class="ml-3 mb-3"><?= $checklist->checklist_title ?></p>
-                                    </div>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
+                        <?php foreach ($checklists as $checklist) : ?>
+                            <?php if ($list->id == $checklist->list_id) {
+                                $lcl[$list->id]['total']++;
+                                if ($checklist->active_bit == 1) {
+                                    $lcl[$list->id]['active']++;
+                                }
+                            } ?>
+                            <?php if ($list->id == $checklist->list_id) : ?>
+                                <div class="d-flex">
+                                    <input class="mb-3 active_bit child-check" type="checkbox" data-p_id="<?= $checklist->project_id ?>" data-l_id="<?= $checklist->list_id ?>" data-cl_id="<?= $checklist->checklist_id ?>" onchange="active_bit(this)" value="<?= ($checklist->active_bit == 1) ?  '1' : '0' ?>" <?= ($checklist->active_bit == 1) ? 'checked' : '' ?>>
+                                    <p class="ml-3 mb-3"><?= $checklist->checklist_title ?></p>
+                                </div>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </div>
                 <?php } ?>
@@ -66,6 +61,7 @@
             $(this).attr('data-status', active == total ? 1 : 0);
         });
     });
+
 
     $('.child-check').change(function() {
         var listId = $(this).data('l_id');

@@ -11,9 +11,11 @@ class Project extends CI_Controller
 		if (!($this->session->userdata('logged_in') == True))
 			redirect(base_url());
 
-		$this->load->model('Project_model');
-		$this->load->model('Admin_model');
-		$this->load->model('Commons_model');
+		$this->load->model([
+			'Project_model',
+			'Admin_model',
+			'Commons_model',
+		]);
 		$this->load->library('Form_validation');
 	}
 
@@ -30,7 +32,6 @@ class Project extends CI_Controller
 		$this->load->view($path . $module, $pgdata);
 		$this->load->view('Admin/footer.php');
 	}
-
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////// MODULE FUNCTIONS //////////////////////////////////////////////
@@ -104,7 +105,7 @@ class Project extends CI_Controller
 		$data['checklists']  = $this->Project_model->get_project_checklists($id);
 		$data['documents']  = $this->Project_model->get_tbl_records($id);
 		$data['lists']       = $this->Project_model->get_project_lists();
-		$data['processes']   = $this->Commons_model->get_where('tbl_process',[
+		$data['processes']   = $this->Commons_model->get_where('tbl_process', [
 			'enable_bit' => 1,
 			'delete_bit' => 0,
 		]);
@@ -126,25 +127,35 @@ class Project extends CI_Controller
 
 	public function add_update_project($data, $check)
 	{
-		$this->form_validation->set_rules('project_name', 'Project Name', 'required');
-		$this->form_validation->set_rules('location', 'Location', 'required');
-		$this->form_validation->set_rules('project_size_m2', 'Project Size', 'required|numeric');
-		$this->form_validation->set_rules('company_name', 'Company Name', 'required');
-		$this->form_validation->set_rules('contact_email', 'Contact Email', 'required');
-		$this->form_validation->set_rules('phone', 'Company Phone', 'required|numeric');
-		$this->form_validation->set_rules('labels', 'Labels', 'required');
+		$this->form_validation->set_rules([
+			['field' => 'project_name',    'label' => 'Project Name',      'rules' => 'required'],
+			['field' => 'location',        'label' => 'Location',          'rules' => 'required'],
+			['field' => 'project_size_m2', 'label' => 'Project Size',      'rules' => 'required|numeric'],
+			['field' => 'company_name',    'label' => 'Company Name',      'rules' => 'required'],
+			['field' => 'contact_email',   'label' => 'Email',             'rules' => 'required|valid_email'],
+			['field' => 'phone',           'label' => 'Phone',             'rules' => 'required|numeric'],
+			['field' => 'labels',          'label' => 'Labels',            'rules' => 'required'],
+			['field' => 'owner',           'label' => 'Owner',         	   'rules' => 'required'],
+			['field' => 'construction_m2', 'label' => 'Construction Area', 'rules' => 'required|numeric'],
+			['field' => 'land_m2',         'label' => 'Land Area',         'rules' => 'required|numeric']
+		]);
+
+
 
 		if ($this->form_validation->run()) :
 			$i_u_data = [
 				'owner_id'      	=> $this->session->userdata('id'),
+				'additional_emails' => json_encode($data['additional_emails']),
 				'project_name' 		=> $data['project_name'],
 				'location'			=> $data['location'],
 				'project_size_m2' 	=> $data['project_size_m2'],
 				'description' 		=> $data['description'],
 				'company_name' 		=> $data['company_name'],
 				'contact_email' 	=> $data['contact_email'],
-				'additional_emails' => json_encode($data['additional_emails']),
 				'phone' 			=> $data['phone'],
+				'owner' 			=> $data['owner'],
+				'construction_m2'   => $data['construction_m2'],
+				'land_m2' 			=> $data['land_m2'],
 				'labels' 			=> $data['labels'],
 				'const_bit' 		=> $data['underConstruction'] == 1 ? 1 : 2,
 				'created_at' 		=> date('Y-m-d H:i:s')
@@ -156,6 +167,7 @@ class Project extends CI_Controller
 				if ($res == true) :
 					$check = $this->Project_model->insert_project_lists($res);
 					if ($check) :
+						$this->send_project_create_email($res);
 						$data['checklists']  = $this->Project_model->get_project_checklists($res);
 						$data['lists']  = $this->Project_model->get_project_lists();
 						$data['pageHeading']  = 'Choose Checklists';
@@ -448,7 +460,7 @@ class Project extends CI_Controller
 		);
 
 		echo json_encode([
-			'status' => $this->my_pdf->merge_pdf($certificates,$this->input->post('pid'))
+			'status' => $this->my_pdf->merge_pdf($certificates, $this->input->post('pid'))
 		]);
 	}
 
@@ -457,5 +469,118 @@ class Project extends CI_Controller
 		echo json_encode(['res' => $this->Commons_model->get_where('tbl_list_certificates', [
 			'project_id' => $this->input->post('pid')
 		])]);
+	}
+
+	public function send_project_create_email($pid)
+	{
+		$project = $this->Commons_model->get_row('tbl_projects', [
+			'id' => $pid
+		]);
+
+		$template = $this->new_project_email_template($project);
+
+		$this->load->library('phpmailer_lib');
+		$res = $this->phpmailer_lib->send_mail(
+			$project->contact_email,
+			"New Project Creation.",
+			$template,
+			null,
+			json_decode($project->additional_emails),
+			null
+		);
+		return $res;
+	}
+
+	public function new_project_email_template($project)
+	{
+		$temp = '
+			<div leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="height:auto !important;width:100% !important; font-family: Helvetica,Arial,sans-serif !important; margin-bottom: 40px;">
+				<center>
+					<table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" style="max-width:800px; background-color:#ffffff;border:1px solid #e4e2e2;border-collapse:separate !important; border-radius:4px;border-spacing:0;color:#242128; margin:0;padding:40px;" heigth="auto">
+						<tbody>
+							<tr>
+								<td align="left" valign="center" style="padding-bottom:40px;border-top:0;height:100% !important;width:100% !important;">
+									<img style="height : 60px; width : 200px;" src="' . base_url('Assets/img/ss-logo.png') . '">
+								</td>
+								<td align="right" valign="center" style="padding-bottom:40px;border-top:0;height:100% !important;width:100% !important;">
+									<span style="color: #8f8f8f; font-weight: normal; line-height: 2; font-size: 14px;">' . date('d.m.y') . '</span>
+								</td>
+							</tr>
+							<tr>
+								<td style="padding-top:10px;border-top:1px solid #e4e2e2">
+									<p style="color:#8f8f8f; font-size: 14px; padding-bottom: 20px; line-height: 1.4;">
+										A Project with Following Details is Created. You can check details by clicking View button Below.
+									</p>
+									<h3 style="color:#303030; font-size:18px; line-height: 1.6; font-weight:500;"> Project Name : ' . ucwords($project->project_name) . '</h3>
+									<hr>
+									<p style="background-color:#f1f1f1; padding: 8px 10px; border-radius: 5px; display: flex; justify-content:space-between; margin-bottom:20px; font-size: 20px;  line-height: 1.4; font-family: Courier New, Courier, monospace; margin-top:0">
+										<span>Project Location : </span> <span> ' . ucwords($project->location) . '</span>
+									</p>
+									<p style="background-color:#f1f1f1; padding: 8px 10px; border-radius: 5px; display: flex; justify-content:space-between; margin-bottom:20px; font-size: 20px;  line-height: 1.4; font-family: Courier New, Courier, monospace; margin-top:0">
+										<span>Project Size M2 : </span> <span> ' . ucwords($project->project_size_m2) . '</span>
+									</p>
+									<p style="background-color:#f1f1f1; padding: 8px 10px; border-radius: 5px; display: flex; justify-content:space-between; margin-bottom:20px; font-size: 20px;  line-height: 1.4; font-family: Courier New, Courier, monospace; margin-top:0">
+										<span>Company Name : </span> <span> ' . ucwords($project->company_name) . '</span>
+									</p>
+									<p style="background-color:#f1f1f1; padding: 8px 10px; border-radius: 5px; display: flex; justify-content:space-between; margin-bottom:20px; font-size: 20px;  line-height: 1.4; font-family: Courier New, Courier, monospace; margin-top:0">
+										<span>Company Phone : </span> <span> ' . ucwords($project->phone) . '</span>
+									</p>
+									<p style="background-color:#f1f1f1; padding: 8px 10px; border-radius: 5px; display: flex; justify-content:space-between; margin-bottom:20px; font-size: 20px;  line-height: 1.4; font-family: Courier New, Courier, monospace; margin-top:0">
+										<span>Company Email : </span> <span> ' . ucwords($project->contact_email) . '</span>
+									</p>
+									<p style="background-color:#f1f1f1; padding: 8px 10px; border-radius: 5px; display: flex; justify-content:space-between; margin-bottom:20px; font-size: 20px;  line-height: 1.4; font-family: Courier New, Courier, monospace; margin-top:0">
+										<span>Project Owner : </span> <span> ' . ucwords($project->owner) . '</span>
+									</p>
+									<p style="background-color:#f1f1f1; padding: 8px 10px; border-radius: 5px; display: flex; justify-content:space-between; margin-bottom:20px; font-size: 20px;  line-height: 1.4; font-family: Courier New, Courier, monospace; margin-top:0">
+										<span>M2 of Construction : </span> <span> ' . ucwords($project->construction_m2) . '</span>
+									</p>
+									<p style="background-color:#f1f1f1; padding: 8px 10px; border-radius: 5px; display: flex; justify-content:space-between; margin-bottom:20px; font-size: 20px;  line-height: 1.4; font-family: Courier New, Courier, monospace; margin-top:0">
+										<span>M2 of land : </span> <span> ' . ucwords($project->land_m2) . '</span>
+									</p>
+									<p style="background-color:#f1f1f1; padding: 8px 10px; border-radius: 5px; display: flex; justify-content:space-between; margin-bottom:20px; font-size: 20px;  line-height: 1.4; font-family: Courier New, Courier, monospace; margin-top:0">
+										Description : <br>
+										' . ucwords($project->description) . '
+									</p>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse;">
+										<tbody>
+											<tr>
+												<td style="padding:15px 0px;" valign="top" align="center">
+													<table border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate !important;">
+														<tbody>
+															<tr>
+																<td align="center" valign="middle" style="padding:13px;">
+																	<a href="' . base_url('State/' . $project->id) . '" title="View" target="_blank" style="font-size: 14px; line-height: 1.5; font-weight: 700; letter-spacing: 1px; padding: 15px 40px; text-align:center; text-decoration:none; color:#FFFFFF; border-radius: 50px; background-color:#145388;">
+																		View
+																	</a>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table style="margin-top:30px; padding-bottom:20px;; margin-bottom: 40px;">
+						<tbody>
+							<tr>
+								<td align="center" valign="center">
+									<p style="font-size: 12px; text-decoration: none;line-height: 1; color:#909090; margin-top:0px; ">
+										info@solutionServices.com.
+									</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</center>
+			</div>';
+		return $temp;
 	}
 }
