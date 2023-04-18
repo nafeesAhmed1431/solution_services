@@ -1,15 +1,15 @@
-
 <style>
-    .dropdown-menu-right{
+    .dropdown-menu-right {
         font-size: 15px;
     }
-    .icon_dropdown{
+
+    .icon_dropdown {
         font-size: 20px;
     }
 </style>
 <nav class="navbar fixed-top">
 
-    <div class="d-flex align-items-center navbar-left">
+    <div class="d-flex align-items-center col-md-1">
 
         <a href="#" class="menu-button d-none d-md-block">
             <svg class="main" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 17">
@@ -37,11 +37,20 @@
     </div>
 
 
-    <a class="navbar-logo" href="#">
+    <a class="navbar-logo col-md-5" href="#">
         <img src="<?php echo base_url('Assets/img/ss-logo.png') ?>" alt="" width="200px">
     </a>
 
-    <div class="navbar-right">
+    <div class="col-md-3">
+        <form action="">
+            <div class="searchInput">
+                <input type="search" name="mainsearchbar" class="mainsearchbar">
+                <button type="submit"><img src="<?= base_url('Assets/img/admin/search.svg') ?>" alt="" width="17px" height="17px"></button>
+            </div>
+        </form>
+    </div>
+
+    <div class="navbar-right col-md-3">
         <div class="header-icons d-inline-block align-middle">
             <?php // if ($this->session->userdata('role_id') == 1 || $this->session->userdata('role_id') == 2) : 
             ?>

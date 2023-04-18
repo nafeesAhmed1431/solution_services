@@ -1,6 +1,6 @@
 <div class="sidebar">
     <div class="main-menu">
-        <div class="scroll dash-nav-items">
+        <div class="scroll dash-nav-items scrollSidebar">
             <ul class="list-unstyled">
                 <?php foreach ($modules as $module) : ?>
                     <li>

@@ -609,8 +609,8 @@ button {
 }
 
 .btn-primary {
-    background-color:  #0f7bb7;
-    border-color:  #0f7bb7;
+    background-color: #0f7bb7;
+    border-color: #0f7bb7;
     color: #fff
 }
 
@@ -1517,7 +1517,7 @@ button {
 .navbar {
     background: #fff;
     height: 120px;
-    padding: 1.5rem 0;
+    padding: 1rem 0;
     box-shadow: 0 1px 15px rgba(0, 0, 0, .04), 0 1px 6px rgba(0, 0, 0, .04)
 }
 
@@ -1837,6 +1837,7 @@ button {
 
 @media (max-width:1439px) {
     .navbar {
+        align-items: center;
         height: 90px
     }
 }
@@ -1913,7 +1914,7 @@ button {
     font-style: normal;
     font-weight: 400;
     border-bottom: 1px solid #f3f3f3;
-    color: #212121;
+    color: #00365A;
     transition: color .3s;
     transition: background .3s
 }
@@ -1921,10 +1922,11 @@ button {
 .sidebar .main-menu ul li a:focus,
 .sidebar .main-menu ul li a:hover {
     color: #fff;
-    background: #5fa00a
+    background: #0696CA
 }
+
 .sidebar .main-menu ul li a:focus span,
-.sidebar .main-menu ul li a:hover span{
+.sidebar .main-menu ul li a:hover span {
     color: #fff;
 }
 
@@ -2582,7 +2584,7 @@ main .container-fluid {
     #app-container.menu-hidden main,
     #app-container.menu-sub-hidden main,
     #app-container.sub-hidden main {
-        margin-left: 160px
+        margin-left: 150px
     }
 
     #app-container.main-hidden main,
@@ -2732,7 +2734,7 @@ main .container-fluid {
 }
 
 .dashboard-line-chart {
-    height: 283px
+    height: 350px
 }
 
 .dashboard-quick-post {
