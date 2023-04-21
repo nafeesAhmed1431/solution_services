@@ -101,7 +101,8 @@
         </div>
       </div>
     </section>
-    <input type="hidden" id="callBackLoc" value="<?php echo base_url(); ?>" />
   </div>
 </div>
+<script src="<?= base_url('Assets/js/vendor/datatables.min.js'); ?>"></script>
+<input type="hidden" id="base_url" value="<?= base_url(); ?>" />
 <script src="<?= base_url('Assets/js/custum/all_projects_view.js'); ?>"></script>

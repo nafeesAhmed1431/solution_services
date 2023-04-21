@@ -2,11 +2,11 @@ let pid = $('#pid').val();
 
 $(document).ready(function () {
 
-    $('.card-list').each(function () {
-        let list_id = $(this).data('list_id');
+    $('.list-card').each(function () {
+        let list_id = $(this).data('lid');
         let percent = list_percentages[list_id]
         if (percent == 100) {
-            $(this).find('.col-document').append(`
+            $(this).find('.list_options').empty().append(`
             <a class="badge badge-success add_document" href="javascript:void(0)" data-list_id="${list_id}">Upload Completion Certificate</a>
             `);
         }
@@ -14,95 +14,82 @@ $(document).ready(function () {
 
 });
 
-function upload_file(element) {
-
-    var doc = element.files[0];
-    var p_id = $(element).data('project_id');
-    var l_id = $(element).data('list_id');
-    var check_id = $(element).data('checklist_id');
-    var form = new FormData($('#doc')[0]);
-
-    form.append('doc', doc);
-    form.append('project_id', p_id);
-    form.append('list_id', l_id);
-    form.append('checklist_id', check_id);
-
+$('.upload_file').on('submit', function (e) {
+    e.preventDefault();
+    let formData = new FormData(this);
+    formData.append('pid', pid);
     $.ajax({
         type: "POST",
         url: base_url + "Project/add_checklist_doc",
         contentType: false,
         processData: false,
-        data: form,
+        data: formData,
         success: function (res) {
-            swal({
-                title: "Success",
-                text: "Documento del proyecto cargado con éxito",
-                type: "success",
-                showCancelButton: true,
-                focusConfirm: true,
-                confirmButtonText: "OK",
-                onClose: refresh(p_id)
+            Swal.fire({
+                title : 'Success',
+                text : 'File Uploaded Successfully. Reloading...',
+                showCancelButton : false,
+                showConfirmButton : false,
+                toast : true,
+                timer : 1500,
+                position : 'top-right',
+                icon : 'success'
+            }).then(res => {
+                location.reload();
             });
         },
         error: function () {
             alert(`error`);
         }
     });
-}
+});
 
-let refresh = (id) => {
-    setTimeout(function () {
-        window.location.href = base_url + "ProjectDetails/" + id;
-    }, 3000);
-    // location.reload()
-}
-
-let notify = (e) => {
+$('.notify_checklist').click(function () {
+    let clid = $(this).data('clid');
     swal({
         title: "Confirmación",
-        text: "¿Está seguro de que desea enviar un correo electrónico de notificación? ?",
+        text: "¿Está seguro de que desea enviar un correo electrónico de notificación?",
         type: "info",
         showLoaderOnConfirm: true,
         showCancelButton: true,
         cancelButtonText: "Cancelar",
         focusConfirm: false,
-        confirmButtonText: "Sí, hazlo !",
-        preConfirm: function (value) {
-            return new Promise(function (resolve, reject) {
-                resolve(confirm_notify(e))
-            })
-        }
-    });
-}
-
-function confirm_notify(e) {
-
-    var pid = $(e).data('pid');
-    var lid = $(e).data('lid');
-    var clid = $(e).data('clid');
-
-    $.ajax({
-        url: base_url + 'Auth/notify_email',
-        method: 'GET',
-        contentType: "application/json; charset:utf-8",
-        dataType: 'json',
-        data: {
-            'pid': pid,
-            'lid': lid,
-            'clid': clid
-        },
-        success: function (res) {
-            swal('Éxito', 'Correo electrónico de notificación enviado con éxito', 'success');
-        },
-        error: function (res) {
-            console.log(res);
-            swal("Error inesperado", "Por favor, póngase en contacto con el administrador del sistema.", "error");
-        },
-        failure: function (res) {
-            swal("Error inesperado", "Por favor, inténtelo de nuevo más tarde.", "error");
-        }
-    });
-}
+        confirmButtonText: "Sí, hazlo !"
+    }).then(() => {
+        // Show loader in swal dialog
+        swal({
+            title: "Enviando correo electrónico de notificación",
+            text: "Por favor, espere...",
+            type: "info",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            onOpen: () => {
+                // Send AJAX request to server
+                $.ajax({
+                    url: base_url + 'Auth/checklist_notify_email',
+                    method: 'GET',
+                    contentType: "application/json; charset:utf-8",
+                    dataType: 'json',
+                    data: {
+                        'pid': pid,
+                        'clid': clid
+                    },
+                    success: function (res) {
+                        // Hide loader in swal dialog and show success toast
+                        swal.close();
+                        swal('Éxito', 'Correo electrónico de notificación enviado con éxito', 'success');
+                    },
+                    error: function (res) {
+                        // Hide loader in swal dialog and show error toast
+                        swal.close();
+                        swal("Error inesperado", "Por favor, póngase en contacto con el administrador del sistema.", "error");
+                    }
+                });
+            }
+        });
+    }).catch(swal.noop);
+});
 
 $('.list_notify').on('click', function () {
     swal({
@@ -160,7 +147,7 @@ $('.date1').on('change', function () {
         dataType: 'JSON',
         data: {
             'date': $(this).val(),
-            'clid': $(this).data('checklist_id'),
+            'clid': $(this).data('clid'),
             'pid': pid
         },
         success: res => {
@@ -190,7 +177,7 @@ $('.date2').on('change', function () {
         dataType: 'JSON',
         data: {
             'date': $(this).val(),
-            'clid': $(this).data('checklist_id'),
+            'clid': $(this).data('clid'),
             'pid': pid
         },
         success: res => {
@@ -220,7 +207,7 @@ $('.comment').on('change', function () {
         dataType: 'JSON',
         data: {
             'comment': $(this).val(),
-            'clid': $(this).data('checklist_id'),
+            'clid': $(this).data('clid'),
             'pid': pid
         },
         success: res => {
@@ -236,10 +223,7 @@ $('.comment').on('change', function () {
                     icon: 'success'
                 });
             }
-        },
-        error: res => { },
-
-
+        }
     });
 });
 
@@ -308,7 +292,7 @@ $(document).on('click', '.add_document', function () {
         showCancelButton: true,
         confirmButtonText: 'Upload',
         showLoaderOnConfirm: true,
-        didOpen: function() {
+        didOpen: function () {
             $('.swal2-file').addClass('form-control');
         },
         preConfirm: function (file) {

@@ -63,8 +63,10 @@ $route['ProjectDetails/(:num)'] = 'Project/project_details/$1';
 $route['EditProject/(:num)']    = 'Project/edit_project/$1';
 $route['UpdateProject']         = 'Project/update_project';
 $route['AllProjects']           = 'Project/complete_projects';
-$route['Process']               = 'Admin/process';
 $route['Lists']                 = 'Admin/lists';
+
+$route['process/(:any)']        = 'Admin/process/$1';
+$route['checklist/(:any)']      = 'Admin/checklists/$1';
 
 //User Routes
 $route['Users']              = 'Admin/users';

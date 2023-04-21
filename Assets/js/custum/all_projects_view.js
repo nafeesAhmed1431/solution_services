@@ -1,12 +1,10 @@
-var win_loc = $('#callBackLoc').val();
+var win_loc = $('#base_url').val();
 
 $(document).ready(function () {
     $('#allProjectsTable').DataTable({
         suppressWarnings: true,
     });
 });
-
-
 
 /// Delete Record
 let btn_delete = (element, id) => {
@@ -16,39 +14,41 @@ let btn_delete = (element, id) => {
             title: alertText + " Detalles del Proyecto!",
             text: "Estás seguro que quieres '" + alertText + "' esto Detalles del Proyecto?",
             type: "warning",
-            showLoaderOnConfirm: true,
             showCancelButton: true,
             cancelButtonText: "Cancelar",
             focusConfirm: false,
             confirmButtonText: "Sí, hazlo!",
-            preConfirm: function () {
-                return new Promise(function (resolve, reject) {
-                    resolve(delete_record_project(element, id));
-                })
-            }
-        });
+        }).then(res => {
+            $.ajax({
+                url: win_loc + 'Project/delete_project_record',
+                method: 'GET',
+                contentType: "application/json; charset:utf-8",
+                dataType: 'json',
+                data: {
+                    'id': id,
+                    'enable_bit': 0,
+                    'delete_bit': 1
+                },
+                success: res => {
+                    swal({
+                        title : 'Success',
+                        text : 'Project Deleted SUccessfully',
+                        showCancelButton : false,
+                        showConfirmButton : false,
+                        toast : true,
+                        timer : 2000,
+                        type : "success"
+                    });
+                    $(element).closest('tr').remove();
+                },
+                error: function (res) {
+                    swal("Error Inesperado", "Por favor, póngase en contacto con el administrador del sistema.", "error");
+                }
+            });
+        }).catch(swal.noop);
     }
 }
-let delete_record_project = (element, id) => {
-    $.ajax({
-        url: win_loc + 'Project/delete_project_record',
-        method: 'GET',
-        contentType: "application/json; charset:utf-8",
-        dataType: 'json',
-        data: {
-            'id': id,
-            'enable_bit': 0,
-            'delete_bit': 1
-        },
-        success: onSuccess_delete_project(element, 1),
-        error: function (res) {
-            swal("Error Inesperado", "Por favor, póngase en contacto con el administrador del sistema.", "error");
-        },
-        failure: function (res) {
-            swal("Error Inesperado", "Por favor, inténtelo de nuevo más tarde.", "error");
-        }
-    });
-}
+
 let onSuccess_delete_project = (e, deleted) => {
     return function (res) {
         try {
@@ -65,6 +65,7 @@ let onSuccess_delete_project = (e, deleted) => {
         }
     }
 }
+
 /// Disable Record
 let btn_disable = (element, id) => {
     var alertText = '';
@@ -89,6 +90,7 @@ let btn_disable = (element, id) => {
         });
     }
 }
+
 let disable_project = (element, enable, id, alertText) => {
     $.ajax({
         url: win_loc + 'Project/disable_project',
@@ -108,6 +110,7 @@ let disable_project = (element, enable, id, alertText) => {
         }
     });
 }
+
 let onSuccess_disable_project = (e, enable, alertText) => {
     return function (res) {
         try {
@@ -128,6 +131,7 @@ let onSuccess_disable_project = (e, enable, alertText) => {
         }
     }
 }
+
 let update_status = (element, id) => {
     var status = $(element).data('status');
     var alertText = (status == 1) ? "Terminado" : "Archivado";
@@ -149,6 +153,7 @@ let update_status = (element, id) => {
         });
     }
 }
+
 let when_confirmed = (element, id, status) => {
 
     $.ajax({
@@ -169,6 +174,7 @@ let when_confirmed = (element, id, status) => {
         }
     });
 }
+
 let when_completed = (e, completed) => {
     return function (res) {
         try {
@@ -188,14 +194,14 @@ let when_completed = (e, completed) => {
     }
 }
 
-$('.make_project_pdf').on('click',function(){
-    
-    let merge =  $.ajax({
-        url : base_url+'/project/gpcc',
-        method : 'POST',
-        dataType : 'JSON',
-        data : {
-            pid : $(this).data('project_id')
+$('.make_project_pdf').on('click', function () {
+
+    let merge = $.ajax({
+        url: base_url + '/project/gpcc',
+        method: 'POST',
+        dataType: 'JSON',
+        data: {
+            pid: $(this).data('project_id')
         }
     })
 

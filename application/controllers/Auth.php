@@ -116,19 +116,21 @@ class Auth extends CI_Controller
 		endif;
 	}
 
-	public function notify_email()
+	public function checklist_notify_email()
 	{
-		$pid = $this->Auth_model->details($this->input->get('pid'), 'tbl_projects');
-		$lid = $this->Auth_model->details($this->input->get('lid'), 'tbl_lists');
-		$clid = $this->Auth_model->details($this->input->get('clid'), 'tbl_checklists');
+		$project = $this->Commons_model->get_row('tbl_projects',['id' => $this->input->get('pid') ]);
+		$checklist = $this->Commons_model->get_row('tbl_checklists',['id' => $this->input->get('clid') ]);
+		$process = $this->Commons_model->get_row('tbl_process',['id' => $checklist->process_id ]);
+		$list = $this->Commons_model->get_row('tbl_lists',['id' => $process->list_id ]);
 
 		$html = "Usted tiene un documento pendiente de entrega con la siguiente informacion:.</br>";
-		$html .= "<p><b>Proyecto : </b>" . $pid[0]->project_name . "</p>";
-		$html .= "<p><b>Entidad : </b>" . $lid[0]->title . "</p>";
-		$html .= "<p><b>Documento: </b>" . $clid[0]->title . "</p>";
+		$html .= "<p><b>Proyecto : </b>" . $project->project_name . "</p>";
+		$html .= "<p><b>Entidad : </b>" . $list->title . "</p>";
+		$html .= "<p><b>Processo : </b>" . $process->title . "</p>";
+		$html .= "<p><b>Documento: </b>" . $checklist->title . "</p>";
 		$html .= "Favor remitir dicho documento a la mayor brevedad posible.";
 
-		$em = $this->phpmailer_lib->send_mail($pid[0]->contact_email, "Documento Pendiente", $html, null, json_decode($pid[0]->additional_emails), $bcc = null);
+		$em = $this->phpmailer_lib->send_mail($project->contact_email, "Documento Pendiente", $html, null, json_decode($project->additional_emails), $bcc = null);
 		echo $em ? json_encode(array('status' => 200)) : false;
 	}
 

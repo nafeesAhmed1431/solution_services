@@ -159,8 +159,6 @@ class Project_model extends CI_Model
         return $this->db->where('id', $id)->get('tbl_projects')->result();
     }
 
-
-
     public function search_where($table, $column, $name)
     {
         $res = $this->db->where($column, $name)->get($table);
@@ -180,8 +178,6 @@ class Project_model extends CI_Model
             ->update($table, $data);
         return  $res == true ? $this->db->where($column, $id)->get($table)->result() : false;
     }
-
-
 
     public function insert_with($table, $data)
     {
@@ -408,6 +404,71 @@ class Project_model extends CI_Model
         return $res ? $res->result() : false;
     }
 
+    public function get_project_checklists_v2($id)
+    {
+        // $data['records'] = $this->db->select([
+        // 	'lists.id as list_id',
+        // 	'process.id as process_id',
+        // 	'checklists.id as checklist_id',
+        // 	'lists.title as list_title',
+        // 	'process.title as process_title',
+        // 	'checklists.title as checklist_title',
+        // ])
+        // 	->from('tbl_lists as lists')
+        // 	->join('tbl_process as process', 'process.list_id = lists.id')
+        // 	->join('tbl_checklists as checklists', 'checklists.process_id = process.id')
+        // 	->order_by('lists.id, process.id, checklists.id')
+        // 	->get()->result();
+
+        $records = $this->db->select([
+            'lists.id as list_id',
+            'process.id as process_id',
+            'checklists.id as checklist_id',
+            'lists.title as list_title',
+            'process.title as process_title',
+            'checklists.title as checklist_title',
+            'records.status as status',
+            'records.checklist_id as records_checklist_id',
+            'records.active_bit as active',
+        ])
+            ->from('tbl_lists as lists')
+            ->join('tbl_process as process', 'process.list_id = lists.id')
+            ->join('tbl_checklists as checklists', 'checklists.process_id = process.id')
+            ->join('tbl_project_records as records', 'records.checklist_id = checklists.id')
+            ->where(['records.project_id' => $id])
+            ->order_by('lists.id, process.id, checklists.id')
+            ->get();
+
+        return $records ? $records->result() : false;
+    }
+
+    public function get_project_details_checklists($id)
+    {
+        $records = $this->db->select([
+            'lists.id as list_id',
+            'process.id as process_id',
+            'checklists.id as checklist_id',
+            'lists.title as list_title',
+            'process.title as process_title',
+            'checklists.title as checklist_title',
+            'records.checklist_id as records_checklist_id',
+            'records.status',
+            'records.date_1',
+            'records.date_2',
+            'records.comments',
+            'records.document_name',
+        ])
+            ->from('tbl_lists as lists')
+            ->join('tbl_process as process', 'process.list_id = lists.id')
+            ->join('tbl_checklists as checklists', 'checklists.process_id = process.id')
+            ->join('tbl_project_records as records', 'records.checklist_id = checklists.id')
+            ->where(['records.project_id' => $id])
+            ->order_by('lists.id, process.id, checklists.id')
+            ->get();
+
+        return $records ? $records->result() : false;
+    }
+
     public function get_project_lists()
     {
         $res = $this->db->where(['enable_bit' => 1])->get('tbl_lists');
@@ -505,6 +566,29 @@ class Project_model extends CI_Model
                 'main.active_bit' => 1,
                 'main.status' => 0,
             ])
+            ->get();
+        return $res ? $res->result() : false;
+    }
+
+    public function get_new_insert_checklists()
+    {
+        $res = $this->db
+            ->select([
+                'list.id as list_id',
+                'process.id as process_id',
+                'main.id as checklist_id',
+            ])
+            ->from('tbl_checklists as main')
+            ->where([
+                'main.enable_bit' => 1,
+                'main.delete_bit' => 0,
+                'process.enable_bit' => 1,
+                'process.delete_bit' => 0,
+                'list.enable_bit' => 1,
+                'list.delete_bit' => 0,
+            ])
+            ->join('tbl_process as process', 'process.id = main.process_id')
+            ->join('tbl_lists as list', 'list.id = process.list_id')
             ->get();
         return $res ? $res->result() : false;
     }

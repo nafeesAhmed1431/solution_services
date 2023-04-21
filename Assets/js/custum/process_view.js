@@ -1,4 +1,5 @@
 var baseUrl = $('#baseUrl').val();
+var listid = $('#list_id').val();
 
 $('.process_status').on('click', function (e) {
     status_text = $(this).data('status') == 1 ? 'Disable' : 'Enable';
@@ -58,6 +59,7 @@ $('.add_process').on('click', function () {
             dataType: 'json',
             data: {
                 'title': result[0],
+                'lid': listid
             },
             success: resuult => {
                 if (resuult.res) {

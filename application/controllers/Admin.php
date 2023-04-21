@@ -226,7 +226,16 @@ class Admin extends CI_Controller
 	public function lists()
 	{
 		$data['pageHeading'] = 'Lists';
-		$data['lists'] = $this->Admin_model->all_data_by_enable_bit('tbl_lists');
+		$data['lists'] = $this->Commons_model->get_where_select(
+			[
+				'*',
+				'(select count(id) from tbl_process where tbl_process.list_id = tbl_lists.id and tbl_process.enable_bit = 1) as process_count'
+			],
+			[
+				'delete_bit =' => 0
+			],
+			'tbl_lists'
+		);
 		$this->load_view('Project/', 'lists', $data);
 	}
 
@@ -367,11 +376,11 @@ class Admin extends CI_Controller
 	///////////////////////////////////////////// CHECKLISTS FUNCTIONS //////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public function checklist_details($id)
+	public function checklists($id)
 	{
-		$data['pageHeading'] = $this->Commons_model->get_row_select('title', 'tbl_lists', ['id' => $id])->title;
-		$data['lists'] = $this->Admin_model->get_checklists($id);
-		$data['list_id'] = $id;
+		$data['pageHeading'] = "Checklists [ " . ($this->Commons_model->get_row_select('title', 'tbl_process', ['id' => $id])->title) . " ]";
+		$data['checklists'] = $this->Commons_model->get_where('tbl_checklists', ['delete_bit' => 0, 'process_id' => $id]);
+		$data['process_id'] = $id;
 		$this->load_view('Project/', 'checklists', $data);
 	}
 
@@ -409,7 +418,6 @@ class Admin extends CI_Controller
 	{
 		echo  json_encode(['res' => $this->Commons_model->insert([
 			'title' => $this->input->get('title'),
-			'list_id' => $this->input->get('list_id'),
 			'process_id' => $this->input->get('process_id'),
 			'enable_bit' => '1',
 			'delete_bit' => '0'
@@ -421,8 +429,7 @@ class Admin extends CI_Controller
 		echo json_encode([
 			'res' => $this->Commons_model->update(
 				[
-					'title' => $this->input->get('title'),
-					'process_id' => $this->input->get('process_id'),
+					'title' => $this->input->get('title')
 				],
 				['id' => $this->input->get('clid')],
 				'tbl_checklists'
@@ -464,10 +471,20 @@ class Admin extends CI_Controller
 	/////////////////////////////////////////////PROCESS FUNCTIONS //////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public function process()
+	public function process($id)
 	{
-		$data['pageHeading'] 	= 'Processes';
-		$data['processes'] 		= $this->Commons_model->get_where_select('*', ['delete_bit' => 0], 'tbl_process');
+		$data['pageHeading'] 	= "Process [ " . ($this->Commons_model->get_row('tbl_lists', ['id' => $id])->title) . " ]";
+		$data['processes'] 		= $this->Commons_model->get_where_select(
+			[
+				'*',
+				'(select count(id) from tbl_checklists where tbl_checklists.process_id = tbl_process.id and tbl_checklists.delete_bit = 0) as checklist_count'
+			],
+			[
+				'delete_bit' => 0, 'list_id' => $id
+			],
+			'tbl_process'
+		);
+		$data['list_id'] 		= $id;
 		$this->load_view('Project/', 'all_processes', $data);
 	}
 
@@ -498,6 +515,7 @@ class Admin extends CI_Controller
 	{
 		echo  json_encode(['res' => $this->Commons_model->insert([
 			'title' => $this->input->get('title'),
+			'list_id' => $this->input->get('lid'),
 			'enable_bit' => '1',
 			'delete_bit' => '0'
 		], 'tbl_process')]);
@@ -583,11 +601,7 @@ class Admin extends CI_Controller
 	}
 
 
-
-
-
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////PROCESS FUNCTIONS //////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 }

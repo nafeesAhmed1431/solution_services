@@ -124,9 +124,7 @@
                         <?= form_error('land_m2') ?>
                     </div>
                 </div>
-                <div class="form-row mb-3">
-                    <div class="additional-emails"></div>
-                </div>
+                <div class="form-row additional-emails"></div>
                 <div class="form-row mb-3">
                     <div class="col-md-12">
                         <div class="custom-control custom-checkbox">
@@ -154,7 +152,7 @@
     $('.add_email').on('click', function(e) {
         e.preventDefault();
         $('.additional-emails').append(`
-        <div class="col-md-6">
+        <div class="col-md-6 mb-3">
             <div class="input-group">
                 <input type="email" class="form-control" name="additional_emails[]" placeholder="Email de Contacto" required>
                 <div class="input-group-append">

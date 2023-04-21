@@ -69,11 +69,8 @@ class Project extends CI_Controller
 	{
 		$data['pageHeading'] 	= 'Detalles del Proyecto';
 		$data['pid'] 	= $id;
-		$data['project'] = $this->Project_model->details('tbl_projects', $id);
-		$data['lists'] = $this->Project_model->get_lists_with_checklists($id);
-		$data['list_count'] = count($data['lists']);
-		$data['documents'] = $this->Project_model->get_project_documents($id);
-		$this->load_view('Project/', 'project_details', $data);
+		$data['records'] = $this->Project_model->get_project_details_checklists($id);
+		$this->load_view('Project/', 'project_details_v2', $data);
 	}
 
 	public function update_project_details($id)
@@ -89,30 +86,21 @@ class Project extends CI_Controller
 	public function edit_project($id)
 	{
 		$data['pageHeading'] 	= 'Editar Proyecto';
-		$data['project'] 		=  $this->Project_model->details('tbl_projects', $id);
-		$data['additional_emails'] = json_decode($data['project'][0]->additional_emails);
-		$data['additional_emails_count'] = count(json_decode($data['project'][0]->additional_emails));
+		$data['project'] 		=  $this->Commons_model->get_row('tbl_projects', ['id' => $id]);
 		$this->load_view('Project/', 'edit_project', $data);
 	}
 
 	public function update_project()
 	{
-		$this->add_update_project($this->input->post(), 2);
+		$this->add_update_project($this->input->post(), false);
 	}
 
 	public function edit_project_checklists($id)
 	{
-		$data['checklists']  = $this->Project_model->get_project_checklists($id);
-		$data['documents']  = $this->Project_model->get_tbl_records($id);
-		$data['lists']       = $this->Project_model->get_project_lists();
-		$data['processes']   = $this->Commons_model->get_where('tbl_process', [
-			'enable_bit' => 1,
-			'delete_bit' => 0,
-		]);
-		$data['project_id'] = $id;
-
-		$data['pageHeading'] = 'Edit Checklists';
-		$this->load_view('Project/', 'new_project_lists', $data);
+		$data['records'] = $this->Project_model->get_project_checklists_v2($id);
+		$data['pageHeading'] = 'Edit Project Checklists';
+		$data['pid'] = $id;
+		$this->load_view('Project/', 'new_project_checklists_v2', $data);
 	}
 
 	public function new_project()
@@ -121,11 +109,11 @@ class Project extends CI_Controller
 			$data['pageHeading'] = 'Añadir Nuevo Proyecto';
 			$this->load_view('Project/', 'new_project', $data);
 		} else {
-			$this->add_update_project($this->input->post(), 1);
+			$this->add_update_project($this->input->post(), true);
 		}
 	}
 
-	public function add_update_project($data, $check)
+	public function add_update_project($data, $insert)
 	{
 		$this->form_validation->set_rules([
 			['field' => 'project_name',    'label' => 'Project Name',      'rules' => 'required'],
@@ -139,8 +127,6 @@ class Project extends CI_Controller
 			['field' => 'construction_m2', 'label' => 'Construction Area', 'rules' => 'required|numeric'],
 			['field' => 'land_m2',         'label' => 'Land Area',         'rules' => 'required|numeric']
 		]);
-
-
 
 		if ($this->form_validation->run()) :
 			$i_u_data = [
@@ -161,17 +147,18 @@ class Project extends CI_Controller
 				'created_at' 		=> date('Y-m-d H:i:s')
 			];
 
-
-			if ($check == 1) :
+			if ($insert) :
 				$res = $this->Project_model->insert('tbl_projects', $i_u_data);
 				if ($res == true) :
-					$check = $this->Project_model->insert_project_lists($res);
+					$check = $this->insert_new_project_records($res);
 					if ($check) :
 						$this->send_project_create_email($res);
-						$data['checklists']  = $this->Project_model->get_project_checklists($res);
-						$data['lists']  = $this->Project_model->get_project_lists();
-						$data['pageHeading']  = 'Choose Checklists';
-						$this->load_view('Project/', 'new_project_lists', $data);
+						$this->load_new_checklist_records($res);
+						return redirect(base_url('Project/load_new_checklist_records/' . $res));
+					// $data['checklists']  = $this->Project_model->get_project_checklists($res);
+					// $data['lists']  = $this->Project_model->get_project_lists();
+					// $data['pageHeading']  = 'Choose Checklists';
+					// $this->load_view('Project/', 'new_project_lists', $data);
 					else :
 						$this->session->set_flashdata('msg', 'Project Created! Unable to Add checklist !!!');
 						redirect(base_url('Projects'));
@@ -183,16 +170,15 @@ class Project extends CI_Controller
 			else :
 				$res = $this->Project_model->update_record('tbl_projects', 'id', $data['id'], $i_u_data);
 				if ($res == true) :
-
 					$this->session->set_flashdata('msg', 'Project Updated SuccessFully !!!');
-					redirect(base_url('Projects'));
+					redirect(base_url('Project'));
 				else :
 					$this->session->set_flashdata('msg', 'Project Updation Unsuccessful !!!');
-					redirect(base_url('Projects'));
+					redirect(base_url('Project'));
 				endif;
 			endif;
 		else :
-			if ($check == 1) :
+			if ($insert) :
 				$data['pageHeading'] = 'Add New Project';
 				$this->load_view('Project/', 'new_project', $data);
 			else :
@@ -283,6 +269,32 @@ class Project extends CI_Controller
 		$this->load_view('Project/', 'pending_projects', $data);
 	}
 
+	public function insert_new_project_records($id)
+	{
+		$checklists = $this->Project_model->get_new_insert_checklists();
+		foreach ($checklists as $checklist) {
+			$this->db->insert('tbl_project_records', [
+				'project_id' => $id,
+				'list_id' => $checklist->list_id,
+				'process_id' => $checklist->process_id,
+				'checklist_id' => $checklist->checklist_id,
+				'status' => 0,
+				'active_bit' => 0,
+				'created_at' => date('Y-m-d H:i:s'),
+				'delete_bit' => 0
+			]);
+		}
+		return true;
+	}
+
+	public function load_new_checklist_records($id)
+	{
+		$data['records'] = $this->Project_model->get_project_checklists_v2($id);
+		$data['pageHeading'] = 'Select Project Checklists';
+		$data['pid'] = $id;
+		$this->load_view('Project/', 'new_project_checklists_v2', $data);
+	}
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////PROJECT FUNCTIONS //////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,37 +306,30 @@ class Project extends CI_Controller
 
 	public function add_checklist_doc()
 	{
-		$file_element_name = 'doc';
-		$doc = $_FILES['doc']['name'];
-		$config = [
+		$this->load->library('upload', [
 			'upload_path' => './Assets/docs/',
 			'allowed_types' => 'pdf|doc|docx|jpg|png|jpeg',
 			'max_size' => 10000000000,
-			'file_name' => time() . $doc
-		];
+			'file_name' => time() . "_" . $this->input->post('pid') . "_" . $this->input->post('clid')
+		]);
 
-		$this->load->library('upload', $config);
-		if (!$this->upload->do_upload($file_element_name)) {
-			echo $this->upload->display_errors('', '');
+		if (!$this->upload->do_upload('doc')) {
+			echo json_encode([
+				'res' => false,
+				'error' => $this->upload->display_errors('', '')
+			]);
 		} else {
 			$rowData = $this->upload->data();
 			if ($rowData['file_name'] != "") {
-				$data = [
-					'project_id'			=> $this->input->post('project_id'),
-					'file_name' 			=> $rowData['file_name'],
-					'list_id'				=> $this->input->post('list_id'),
-					'checklist_id'			=> $this->input->post('checklist_id'),
-				];
-				$res = $this->Project_model->insert_with('tbl_records', $data);
-
-				$this->Commons_model->update([
-					'status' => 1
-				], [
-					'project_id'			=> $this->input->post('project_id'),
-					'list_id'				=> $this->input->post('list_id'),
-					'checklist_id'			=> $this->input->post('checklist_id'),
-				], 'tbl_project_records');
-				echo ($res > 0) ? json_encode(array(["status" => 200, "name" => $rowData['file_name']])) : json_encode(array("status" => 201));
+				echo json_encode([
+					'res' => $this->Commons_model->update([
+						'status' => 1,
+						'document_name' => $rowData['file_name']
+					], [
+						'project_id'	=> $this->input->post('pid'),
+						'checklist_id'	=> $this->input->post('clid'),
+					], 'tbl_project_records')
+				]);
 			} else {
 				echo json_encode(array('status' => 203));
 			}
@@ -381,6 +386,116 @@ class Project extends CI_Controller
 			'project_id' => $this->input->get('pid'),
 			'checklist_id' => $this->input->get('clid')
 		], 'tbl_project_records')]);
+	}
+
+	public function update_project_list_v1()
+	{
+		echo json_encode(['res' => $this->Commons_model->update(
+			[
+				'active_bit' => 1
+			],
+			[
+				'project_id' => $this->input->get('pid'),
+				'list_id' => $this->input->get('lid')
+			],
+			'tbl_project_records'
+		)]);
+	}
+
+	public function update_project_process_v1()
+	{
+		if ($this->Commons_model->get_row(
+			'tbl_project_records',
+			[
+				'project_id' => $this->input->get('project_id'),
+				'process_id' => $this->input->get('process_id')
+			]
+		)->status == 0) {
+			echo json_encode(['res' => $this->Commons_model->update(
+				[
+					'active_bit' => 1
+				],
+				[
+					'project_id' => $this->input->get('project_id'),
+					'process_id' => $this->input->get('process_id')
+				],
+				'tbl_project_records'
+			)]);
+		} else {
+			echo json_encode(['res' => false]);
+		}
+	}
+
+	public function update_project_checklist_v1()
+	{
+		if ($this->Commons_model->get_row(
+			'tbl_project_records',
+			[
+				'project_id' => $this->input->get('project_id'),
+				'checklist_id' => $this->input->get('clid')
+			]
+		)->status == 0) {
+			echo json_encode(['res' => $this->Commons_model->update(
+				[
+					'active_bit' => $this->input->get('status')
+				],
+				[
+					'project_id' => $this->input->get('project_id'),
+					'checklist_id' => $this->input->get('clid')
+				],
+				'tbl_project_records'
+			)]);
+		} else {
+			echo json_encode(['res' => false]);
+		}
+	}
+	
+	public function load_dashbaord()
+	{
+		$count_status_1 = ($this->db->select('COUNT(id) as count')->from('tbl_projects')->where(['status'=> 1,'delete_bit'=>0])->get()->row())->count;
+		$count_status_2 = ($this->db->select('COUNT(id) as count')->from('tbl_projects')->where(['status'=> 2,'delete_bit'=>0])->get()->row())->count;
+		$count_status_3 = ($this->db->select('COUNT(id) as count')->from('tbl_projects')->where(['status'=> 3,'delete_bit'=>0])->get()->row())->count;
+		$uc = $this->db->select('COUNT(id) as count')->from('tbl_projects')->where('const_bit', 1)->get()->row();
+
+		$total = $count_status_1 + $count_status_2 + $count_status_3;
+		$completed = ($count_status_1 / $total) * 100;
+		$pending = ($count_status_2 / $total) * 100;
+		$archived = ($count_status_3 / $total) * 100;
+		$under_const = ($uc->count / $total) * 100;
+
+		$categories = ["Complated", "Pending", "Archived", "Under Construction"];
+		$values = [
+			$count_status_1,
+			$count_status_2,
+			$count_status_3,
+			$uc->count,
+		];
+
+		echo json_encode([
+			'line' => [
+				'categories' => $categories,
+				'values' => $values
+			],
+			'pie' => [
+				'colors' => [
+					"lightgreen",
+					"lightpink",
+					"#efa62e",
+					"lightblue"
+				],
+				'categories' => $categories,
+				'values' => $values,
+			],
+			'info' => [
+				'Completed' => intval($completed),
+				'Pending' => intval($pending),
+				'Archived' => intval($archived),
+				'Under Construction' => intval($under_const)
+			],
+			'total' => [
+				'total' => $total
+			]
+		]);
 	}
 
 

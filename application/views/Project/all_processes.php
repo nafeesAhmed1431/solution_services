@@ -29,6 +29,7 @@
                     <tr>
                       <th>#</th>
                       <th>Title</th>
+                      <th>Checklists</th>
                       <th>Status</th>
                       <th class="text-center">Actions</th>
                     </tr>
@@ -38,6 +39,7 @@
                       <tr>
                         <td><?= $process->id ?></td>
                         <td><?= $process->title ?></td>
+                        <td><a class="badge badge-warning badge-sm" href="<?=base_url('checklist/'.$process->id)?>">View <?=$process->checklist_count?></a></td>
                         <td>
                           <a class="btn process_status" data-status="<?= $process->enable_bit ?>" data-process_id="<?= $process->id ?>" type="button" href="javascript:void(0);">
                             <i class="<?= $process->enable_bit == 1 ? "simple-icon-check" : "iconsminds-close"; ?>"></i>
@@ -57,9 +59,9 @@
         </div>
       </div>
     </section>
-    <input type="hidden" id="callBackLoc" value="<?php echo base_url(); ?>" />
   </div>
 </div>
 <input type="hidden" id="baseUrl" value="<?= base_url() ?>" />
+<input type="hidden" id="list_id" value="<?= $list_id ?>" />
 <script src="<?= base_url('Assets/js/custum/process_view.js') ?>"></script>
 <script src="<?= base_url('Assets/js/plugins/sweetalert2.js') ?>"></script>

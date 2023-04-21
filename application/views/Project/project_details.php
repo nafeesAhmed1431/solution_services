@@ -23,9 +23,10 @@
 
     .add_document {
         position: absolute;
-        top: -25px;
-        left: 13px;
+        top: 11px;
+        right: 25px;
     }
+    
 </style>
 <div class="card-body">
     <h2><?= $pageHeading ?> : " <?= $project[0]->project_name ?> "</h2>
@@ -149,8 +150,6 @@
     </div>
 <?php } ?>
 
-<script>
-    var list_percentages = JSON.parse('<?= json_encode($list_percentages) ?>');
-</script>
+
 <script src="<?= base_url('Assets/js/custum/project_details_view.js'); ?>"></script>
 <script src="<?= base_url('Assets/js/plugins/sweetalert2.js'); ?>"></script>

@@ -2,6 +2,7 @@
 ///////////     Update list       ///////////////
 ////////////////////////////////////////////////
 
+let win_loc = $('#base_url').val();
 function btn_update_list_detail(e, id) {
     swal({
         title: 'Update List',
@@ -51,7 +52,7 @@ function btn_update_list_detail(e, id) {
 }
 function update_list_detail(e, detail) {
     $.ajax({
-        url: win_loc + '/update_list_details',
+        url: win_loc + 'Admin/update_list_details',
         method: 'GET',
         dataType: 'JSON',
         contentType: "application/json; charset:utf-8",
@@ -108,7 +109,7 @@ function btn_list_disable(e, id) {
 }
 function disable_record(e, enable, id) {
     $.ajax({
-        url: win_loc + '/disable_list',
+        url: win_loc + 'Admin/disable_list',
         method: 'GET',
         contentType: "application/json; charset:utf-8",
         dataType: 'json',
@@ -174,7 +175,7 @@ function delete_record_list(e, deleted, id) {
     // alert(`deleted is ${deleted} and id is ${id}`);
     // return;
     $.ajax({
-        url: win_loc + '/delete_list_record',
+        url: win_loc + 'Admin/delete_list_record',
         method: 'GET',
         contentType: "application/json; charset:utf-8",
         dataType: 'json',
@@ -566,23 +567,3 @@ function add_list_record(detail) {
         failure: res => swal("Upexpected Error", "Please contact system administrator.", "error"),
     });
 }
-
-// function add_list() {
-//     swal({
-//         title: 'Add new list',
-//         html: '<input type="text" id="new_checklist" class="form-control mb-3" placeholder="Enter List name here">',
-//         showCancelButton: true,
-//         showConfirmButton: true,
-//         type: 'question',
-//         preConfirm: function () {
-//             return new Promise(function (resolve, reject) {
-//                 if ($('#new_checklist').val() == "") { reject("Please fill all mendatory(*) fields first!"); }
-//                 resolve([
-//                     $('#new_checklist').val(),
-//                 ])
-//             })
-//         }
-//     }).then((res)=>{
-        
-//     }).catch(swal.noop());
-// }

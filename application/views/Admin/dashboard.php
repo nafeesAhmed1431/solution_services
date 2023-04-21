@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-lg-3">
             <div class="dashboardCard">
-                <a href="<?= base_url('Projects') ?>" class=" justify-content-between d-flex flex-row align-items-center beforeStyling">
+                <a href="<?= base_url('Project') ?>" class=" justify-content-between d-flex flex-row align-items-center beforeStyling">
                     <div>
                         <h1 class="font_large" id="total"><?= $projects ?></h1>
                         <div class="dash-cards-text">
@@ -29,7 +29,7 @@
         </div>
         <div class="col-lg-3">
             <div class="dashboardCard">
-                <a href="<?= base_url('Projects') ?>" class=" justify-content-between d-flex flex-row align-items-center beforeStyling archivado">
+                <a href="<?= base_url('Project') ?>" class=" justify-content-between d-flex flex-row align-items-center beforeStyling archivado">
                     <div>
                         <h1 class="font_large" id="archived"><?= $archived ?></h1>
                         <div class="dash-cards-text">
@@ -47,7 +47,7 @@
 
         <div class="col-lg-3">
             <div class="dashboardCard">
-                <a href="<?= base_url('Projects') ?>" class=" justify-content-between d-flex flex-row align-items-center beforeStyling terminado">
+                <a href="<?= base_url('Project') ?>" class=" justify-content-between d-flex flex-row align-items-center beforeStyling terminado">
                     <div>
                         <h1 class="font_large" id="completed"><?= $completed ?></h1>
                         <div class="dash-cards-text">
@@ -64,7 +64,7 @@
         </div>
         <div class="col-lg-3">
             <div class="dashboardCard">
-                <a href="<?= base_url('Projects') ?>" class=" justify-content-between d-flex flex-row align-items-center beforeStyling under">
+                <a href="<?= base_url('Project') ?>" class=" justify-content-between d-flex flex-row align-items-center beforeStyling under">
                     <div>
                         <h1 class="font_large" id="total"><?= $underConstruction->underConstruction ? $underConstruction->underConstruction : ""; ?></h1>
                         <div class="dash-cards-text">
@@ -80,15 +80,12 @@
             </div>
         </div>
     </div>
-
-
     <div class="row">
         <div class="col-md-4 mb-4">
             <div class="card round_corner">
                 <div class="card-body ">
                     <h5 class="card-title">Graph</h5>
                     <div class="dashboard-line-chart">
-                        <!-- <canvas id="salesChart"></canvas> -->
                         <div id="myChart" style="width:100%;max-width:500px"></div>
                     </div>
                 </div>
@@ -98,49 +95,7 @@
             <div class="card h-100 round_corner">
                 <div class="card-body">
                     <h5 class="card-title">Projects</h5>
-                    <div class="dashboard-donut-chart">
-                        <!-- <canvas id="polarChart"></canvas> -->
-                        <div class="progressBar">
-                            <span>Server Migration</span>
-                            <span>20%</span>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width:20%">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="progressBar">
-                            <span>Sales Tracking</span>
-                            <span>40%</span>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar_40" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="progressBar">
-                            <span>Customers Database</span>
-                            <span>60%</span>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar_60" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:60%">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="progressBar">
-                            <span>Payout Details</span>
-                            <span>80%</span>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar_80" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width:80%">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="progressBar">
-                            <span>Account Setup</span>
-                            <span>Complete!</span>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar_com" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="dashboard-donut-chart"></div>
                 </div>
             </div>
         </div>
@@ -149,7 +104,6 @@
                 <div class="card-body ">
                     <h5 class="card-title backchange">Overview</h5>
                     <div class="dashboard-line-chart">
-                        <!-- <canvas id="salesChart"></canvas> -->
                         <canvas id="salesChart" style="width:100%;max-width:600px"></canvas>
                     </div>
                 </div>
@@ -157,5 +111,6 @@
         </div>
     </div>
 </div>
-<input id="polarData" hidden data-completed="<?= $completed ?>" data-archived="<?= $archived ?>" data-total="<?= $projects ?>">
-<script src="<?= base_url('Assets/js/custum/custom_charts.js'); ?>?v=1.1"></script>
+<script src="<?= base_url('Assets/charts/chart.min.js') ?>"></script>
+<script src="<?= base_url('Assets/charts/apexcharts.min.js') ?>"></script>
+<script src="<?= base_url('Assets/js/custum/custom_charts.js'); ?>"></script>
