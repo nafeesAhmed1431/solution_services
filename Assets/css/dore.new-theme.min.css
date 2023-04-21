@@ -2748,7 +2748,7 @@ main .container-fluid {
 .dashboard-donut-chart,
 .dashboard-list-with-user,
 .dashboard-logs {
-    height: 270px
+    /* height: 270px */
 }
 
 .dashboard-small-chart {
@@ -2927,6 +2927,10 @@ main .container-fluid {
 @media (max-width:575px) {
     .fc-basic-view .fc-body .fc-row {
         min-height: 3em
+    }
+
+    .beforeStyling::before {
+        top: 9px !important;
     }
 }
 
