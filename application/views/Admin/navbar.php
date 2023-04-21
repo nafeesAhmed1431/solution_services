@@ -7,9 +7,9 @@
         font-size: 20px;
     }
 </style>
-<nav class="navbar fixed-top">
+<nav class="navbar fixed-top p-0 py-md-3">
 
-    <div class="d-flex align-items-center col-md-1">
+    <div class="d-flex align-items-center col-2 col-md-1 p-0 px-md-3">
 
         <a href="#" class="menu-button d-none d-md-block">
             <svg class="main" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 17">
@@ -37,11 +37,11 @@
     </div>
 
 
-    <a class="navbar-logo col-md-5" href="#">
+    <a class="navbar-logo col-md-5 col-7 p-0 px-md-3" href="#">
         <img src="<?php echo base_url('Assets/img/ss-logo.png') ?>" alt="" width="200px">
     </a>
 
-    <div class="col-md-3">
+    <div class="col-md-3 d-none d-md-block">
         <form action="">
             <div class="searchInput">
                 <input type="search" name="mainsearchbar" class="mainsearchbar">
@@ -75,7 +75,7 @@
 
         </div>
 
-        <div class="user d-inline-block">
+        <div class="user d-inline-block p-0 pr-md-3">
             <button class="btn btn-empty p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="name"><?= $this->session->userdata('username') ?></span>
                 <span>
